@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Psychometric Equivalence Specification — TrustXD ExamOS</title>
+<meta name="description" content="How Item Response Theory keeps AI-generated exam variants mathematically fair: the 3PL model, radicals and incidentals, cold-start calibration, tolerance derivation, form equivalence and DIF.">
+<meta name="theme-color" content="#F4F3EF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='8' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%232540FF' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/core.css">
+<link rel="stylesheet" href="assets/css/doc.css">
+<style>
+  .eq {
+    font-family: var(--mono);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+    border-radius: var(--r);
+    padding: 1.1rem 1.3rem;
+    margin-top: 1.25rem;
+    font-size: .84rem;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .eq b { color: var(--accent-deep); font-weight: 500; }
+  .eq .where { display: block; margin-top: .6rem; font-family: var(--sans); font-size: var(--t-xs); color: var(--ink-3); line-height: 1.6; }
+  .fig-viz { background: var(--surface); border-radius: var(--r-lg); box-shadow: inset 0 0 0 1px var(--line); padding: clamp(1rem,2.2vw,1.6rem); margin-top: 1.75rem; }
+  .fig-viz .chart svg { width: 100%; height: auto; overflow: visible; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html" aria-label="TrustXD ExamOS home">
+      <svg class="brand__mark" viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 8l10 10M18 8L8 18" stroke="#2540FF" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="13" cy="13" r="3.2" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span class="brand__name"><b>TrustXD</b> <span>ExamOS</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="index.html#modules">Platform</a>
+      <a class="nav__link" href="prd.html">PRD</a>
+      <a class="nav__link" href="architecture.html">Architecture</a>
+      <a class="nav__link" href="psychometrics.html" aria-current="page">Psychometrics</a>
+      <a class="nav__link" href="pitch.html">Deck</a>
+    </nav>
+    <div class="nav__cta">
+      <a class="btn btn--sm" href="index.html#pilot" data-magnet="0.2">Request a pilot</a>
+      <button class="nav__burger" aria-label="Open menu" aria-expanded="false"><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" role="dialog" aria-label="Menu" aria-modal="true">
+  <ul class="menu__list">
+    <li class="menu__item"><a href="index.html">Home</a></li>
+    <li class="menu__item"><a href="prd.html">Product requirements</a></li>
+    <li class="menu__item"><a href="architecture.html">Architecture</a></li>
+    <li class="menu__item"><a href="psychometrics.html">Psychometrics</a></li>
+    <li class="menu__item"><a href="pitch.html">Pitch deck</a></li>
+  </ul>
+  <div class="menu__foot">
+    <p class="mono muted">TRUSTXD EXAMOS · <span data-year></span></p>
+    <a class="btn btn--accent btn--sm" href="index.html#pilot">Request a pilot</a>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="dochero">
+  <div class="wrap">
+    <div class="dochero__meta">
+      <span class="kicker">Deliverable 03</span>
+      <span class="chip">Specification · v1.0</span>
+      <span class="mono dim">MODEL: 3PL · SCALE: LOGITS</span>
+    </div>
+    <h1 data-split>Psychometric equivalence specification</h1>
+    <p class="lead" data-rise>
+      Giving every candidate a different paper is only defensible if the papers are the same
+      test. This document sets out exactly what "the same test" means, how it is enforced before
+      delivery, and what evidence would prove the claim false.
+    </p>
+
+    <div class="dochero__facts" data-stagger="0.06">
+      <div class="dochero__fact"><b>Model</b><span>Three-parameter logistic, hierarchical over item families</span></div>
+      <div class="dochero__fact"><b>Tolerance</b><span>Δb ≤ 0.05 · Δa ≤ 0.01 · Δt ≤ 4 s</span></div>
+      <div class="dochero__fact"><b>Form drift</b><span>&lt; 0.25 marks across the whole ability range</span></div>
+      <div class="dochero__fact"><b>Enforcement</b><span>Pre-delivery rejection, not post-hoc apology</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="doc">
+    <aside class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a class="toc__link is-active" href="#claim">1 · The claim</a></li>
+        <li><a class="toc__link" href="#model">2 · The measurement model</a></li>
+        <li><a class="toc__link" href="#radicals">3 · Radicals and incidentals</a></li>
+        <li><a class="toc__link" href="#coldstart">4 · Cold-start calibration</a></li>
+        <li><a class="toc__link" href="#tolerance">5 · Where ±0.05 comes from</a></li>
+        <li><a class="toc__link" href="#forms">6 · Form-level equivalence</a></li>
+        <li><a class="toc__link" href="#linking">7 · Linking and scale maintenance</a></li>
+        <li><a class="toc__link" href="#exposure">8 · Exposure control</a></li>
+        <li><a class="toc__link" href="#dif">9 · Differential item functioning</a></li>
+        <li><a class="toc__link" href="#validation">10 · Validation and limitations</a></li>
+      </ol>
+    </aside>
+
+    <article class="prose">
+
+      <section id="claim" data-doc-sec>
+        <h2><span class="sn">Section 01</span>The claim, stated so it can be tested</h2>
+        <p>
+          <strong>Claim.</strong> For any two candidates <em>i</em> and <em>j</em> of identical
+          ability θ, sitting two different generated forms of the same examination, the expected
+          score difference attributable to form is smaller than the measurement error of the
+          instrument by at least an order of magnitude.
+        </p>
+        <p>
+          This is deliberately a statement about <em>expected scores on the ability scale</em>,
+          not about surface similarity. Two papers that look different are not necessarily
+          unequal, and two that look identical are not necessarily equal. Only the item
+          parameters settle it.
+        </p>
+        <div class="note note--accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.4l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p><b>What would falsify it.</b> A reliably detectable relationship between which
+          variant a candidate received and the score they obtained, after conditioning on
+          ability. We test for exactly this after every administration and publish the result —
+          §10.</p>
+        </div>
+      </section>
+
+      <section id="model" data-doc-sec>
+        <h2><span class="sn">Section 02</span>The measurement model</h2>
+        <p>
+          Every item is described by a three-parameter logistic model. The probability that a
+          candidate of ability θ answers item <em>k</em> correctly is:
+        </p>
+        <div class="eq">
+          <b>P<sub>k</sub>(θ) = c<sub>k</sub> + (1 − c<sub>k</sub>) / (1 + e<sup>−1.7·a<sub>k</sub>·(θ − b<sub>k</sub>)</sup>)</b>
+          <span class="where">
+            <b>a</b> — discrimination: how sharply the item separates candidates around its difficulty.<br>
+            <b>b</b> — difficulty, on the same logit scale as ability, so "as hard as a candidate at θ = 0.38" is a precise statement.<br>
+            <b>c</b> — pseudo-guessing asymptote: the probability a candidate of very low ability still answers correctly, driven by option count and distractor plausibility.<br>
+            The constant 1.7 places the logistic on the normal-ogive metric, which is the convention in Indian and international large-scale testing.
+          </span>
+        </div>
+        <p>
+          Two items are psychometrically equivalent when their (a, b, c) triples coincide within
+          tolerance <em>and</em> their expected response times coincide. Everything else about an
+          item — its wording, its names, its numbers — is free to move.
+        </p>
+
+        <figure class="fig-viz">
+          <div class="chart" id="pIcc"></div>
+          <div class="legend">
+            <span class="legend__i"><i class="legend__key" style="border-top:2px dotted var(--series-2);background:none;height:0"></i>Base item, calibrated (dotted)</span>
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>Generated variants, n = 8 (solid)</span>
+            <span class="legend__i"><i class="legend__key legend__key--band" style="background:var(--series-1);opacity:.18"></i>±0.05 logit parity envelope</span>
+          </div>
+          <figcaption style="font-size:var(--t-xs);color:var(--ink-3);margin-top:.8rem"><b class="mono">FIG 1</b> &nbsp;Item characteristic curves. The eight variants are not approximately equal — they are inside a band the calibrator refuses to let them leave.</figcaption>
+        </figure>
+
+        <p>
+          Equivalence of difficulty is not enough on its own. An item that is equally hard but
+          less discriminating measures less, and a paper built from such variants would be
+          quietly less reliable. So the same tolerance is applied to <em>information</em>:
+        </p>
+        <div class="eq">
+          <b>I<sub>k</sub>(θ) = 2.89 · a<sub>k</sub><sup>2</sup> · [(1 − P<sub>k</sub>) / P<sub>k</sub>] · [(P<sub>k</sub> − c<sub>k</sub>) / (1 − c<sub>k</sub>)]<sup>2</sup></b>
+          <span class="where">Item information: how much a single item reduces uncertainty about θ. A variant must peak at the same place, and to the same height, as its parent.</span>
+        </div>
+
+        <figure class="fig-viz">
+          <div class="chart" id="pInfo"></div>
+          <div class="legend">
+            <span class="legend__i"><i class="legend__key" style="border-top:2px dotted var(--series-2);background:none;height:0"></i>Base item (dotted)</span>
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>Generated variants (solid)</span>
+          </div>
+          <figcaption style="font-size:var(--t-xs);color:var(--ink-3);margin-top:.8rem"><b class="mono">FIG 2</b> &nbsp;Item information. Equal difficulty with unequal information would still be an unfair swap; holding Δa ≤ 0.01 keeps the peaks coincident.</figcaption>
+        </figure>
+      </section>
+
+      <section id="radicals" data-doc-sec>
+        <h2><span class="sn">Section 03</span>Radicals and incidentals</h2>
+        <p>
+          The generation rule comes from item-generation theory, not from prompt engineering.
+          Every feature of an item is classified as a <strong>radical</strong> — a feature that
+          drives difficulty — or an <strong>incidental</strong> — a feature that does not.
+          <strong>Generation may only move incidentals.</strong>
+        </p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Feature</th><th>Class</th><th>May the generator move it?</th></tr></thead>
+            <tbody>
+              <tr><td>Numeric values inside declared ranges</td><td>Incidental</td><td>Yes — provided the arithmetic stays in the same magnitude band</td></tr>
+              <tr><td>Person and place names</td><td>Incidental</td><td>Yes — drawn from a curated, regionally balanced list</td></tr>
+              <tr><td>Surface phrasing and sentence order</td><td>Incidental</td><td>Yes — within a readability band of ±0.4 grade levels</td></tr>
+              <tr><td>Option order</td><td>Incidental</td><td>Yes — with key position balanced across the cohort</td></tr>
+              <tr><td>Cognitive operation required</td><td><strong>Radical</strong></td><td>No</td></tr>
+              <tr><td>Number of solution steps</td><td><strong>Radical</strong></td><td>No</td></tr>
+              <tr><td>Number of options</td><td><strong>Radical</strong> (sets <em>c</em>)</td><td>No</td></tr>
+              <tr><td>Distractor structure — which misconception each distractor encodes</td><td><strong>Radical</strong></td><td>No; distractors are regenerated from the same misconception map</td></tr>
+              <tr><td>Quantity of irrelevant information</td><td><strong>Radical</strong></td><td>No</td></tr>
+              <tr><td>Unit systems and conversions required</td><td><strong>Radical</strong></td><td>No</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          An item template is therefore not a prompt. It is a typed object: declared parameters
+          with ranges and units, a closed-form solution, a misconception map for distractors, and
+          an explicit list of transforms that provably preserve the answer. The model's job is
+          confined to producing fluent natural language over that structure.
+        </p>
+        <div class="note note--warn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2l6.2 11H1.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6.4v3M8 11.4v.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p><b>The known failure mode.</b> A change intended as incidental can turn out to be
+          radical — a "cyclist" swapped for a "goods train" changes the plausible magnitude of
+          the answer and therefore the guessability of the distractors. This is why every
+          variant is machine-solved and calibrated rather than trusted, and why the readability
+          and magnitude bands exist.</p>
+        </div>
+      </section>
+
+      <section id="coldstart" data-doc-sec>
+        <h2><span class="sn">Section 04</span>Cold-start: parameters for an item nobody has ever sat</h2>
+        <p>
+          The obvious objection: IRT parameters are normally <em>estimated from response data</em>,
+          and a variant generated four seconds ago has none. Four mechanisms answer this, in the
+          order they are applied.
+        </p>
+        <ol class="steps">
+          <li>
+            <strong>Family-level priors (hierarchical IRT).</strong> Variants of one template are
+            not independent items; they are siblings drawn from an item family. The family has its
+            own parameter distribution, estimated from every sibling ever administered. A new
+            variant inherits the family posterior as its prior — so it starts with an informative
+            estimate, not a guess. Formally, b<sub>k</sub> ~ N(μ<sub>family</sub>,
+            σ<sup>2</sup><sub>family</sub>), and the family's σ is itself an object of study: a
+            family with a wide σ is a badly specified template and is sent back to its author.
+          </li>
+          <li>
+            <strong>Feature-based prediction (LLTM-style).</strong> Difficulty is regressed on the
+            item's declared radicals — number of solution steps, operation type, unit conversions,
+            distractor structure, readability. Because generation cannot move radicals, the
+            predicted difficulty of a variant is by construction the predicted difficulty of its
+            parent. This model is fitted on the whole calibrated bank, not on one family, and its
+            residual standard error is reported with every release.
+          </li>
+          <li>
+            <strong>Seeding on a non-scoring cohort.</strong> New families enter live papers as
+            unscored seed items first — the standard practice for pre-testing — accumulating real
+            response data before any candidate's result depends on them. A family is not released
+            for scoring until its parameters are estimated from at least 1,200 responses per
+            variant class.
+          </li>
+          <li>
+            <strong>Online re-estimation and retrospective correction.</strong> During delivery,
+            responses update the family posterior continuously. If a variant's realised difficulty
+            drifts outside tolerance mid-administration, it is withdrawn from further delivery and
+            every candidate who already received it is re-scored on the corrected parameters —
+            upward or downward — before results are released.
+          </li>
+        </ol>
+        <div class="note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="var(--accent)" stroke-width="1.4"/><path d="M8 4.6v4.2M8 11.1v.4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p><b>The honest version.</b> Mechanism 3 is the one that carries the scientific weight;
+          1 and 2 make cold-start estimates good enough to be safe, and 4 catches what the first
+          three miss. A vendor claiming that a language model can assign IRT parameters directly,
+          with no response data anywhere in the loop, is claiming something psychometrics does
+          not support.</p>
+        </div>
+      </section>
+
+      <section id="tolerance" data-doc-sec>
+        <h2><span class="sn">Section 05</span>Where ±0.05 logits comes from</h2>
+        <p>
+          The tolerance is not a round number chosen for comfort. It is derived from the effect a
+          difficulty shift can have on a candidate's expected score, and bounded so that effect
+          stays far below the test's own measurement error.
+        </p>
+        <p>The steepest point of the ICC bounds the damage a difficulty error can do:</p>
+        <div class="eq">
+          <b>max<sub>θ</sub> |∂P/∂b| = 1.7·a·(1 − c) / 4</b>
+          <span class="where">For the worked item (a = 1.240, c = 0.200): 1.7 × 1.240 × 0.800 ÷ 4 = <b>0.4216</b> per logit.<br>
+          A difficulty error of 0.05 logits therefore moves the probability of a correct response by at most <b>0.021</b> — about two percentage points, and only for candidates sitting exactly at the item's difficulty.</span>
+        </div>
+        <p>Aggregated over a 60-item paper, three quantities matter, and the specification bounds all three:</p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Quantity</th><th>Value</th><th>As a fraction of one SEM<sup>†</sup></th></tr></thead>
+            <tbody>
+              <tr><td>Typical form effect — variants uniform on ±0.05, independent across items</td><td class="num">σ ≈ 0.094 marks</td><td class="num">3.0%</td></tr>
+              <tr><td>Systematic effect — bounded by the mean-deviation rule |b̄<sub>form</sub> − b̄<sub>reference</sub>| ≤ 0.008</td><td class="num">≤ 0.202 marks</td><td class="num">6.4%</td></tr>
+              <tr><td>Adversarial worst case — every item at the tolerance edge, same direction (prevented by the rule above)</td><td class="num">1.27 marks</td><td class="num">40%</td></tr>
+              <tr><td><strong>Standard error of measurement</strong>, 60 items, reliability 0.90, score SD 10</td><td class="num"><strong>3.16 marks</strong></td><td class="num">100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:var(--t-sm);color:var(--ink-3)">
+          <sup>†</sup> SEM = SD × √(1 − reliability). The comparison is the point: a candidate's
+          score already carries about ±3.2 marks of irreducible measurement noise. The form they
+          were given contributes under a tenth of one mark of that.
+        </p>
+        <p>
+          Two rules follow, and both are enforced by the calibrator rather than by policy:
+        </p>
+        <ul class="bullets">
+          <li><strong>Per-item:</strong> reject any variant with |Δb| &gt; 0.05, |Δa| &gt; 0.01, |Δc| &gt; 0 or |Δt̄| &gt; 4 s.</li>
+          <li><strong>Per-form:</strong> reject any assembled form whose <em>mean signed</em> difficulty deviation exceeds 0.008 logits. This is what stops many small permitted errors from stacking in one direction.</li>
+        </ul>
+      </section>
+
+      <section id="forms" data-doc-sec>
+        <h2><span class="sn">Section 06</span>Form-level equivalence</h2>
+        <p>
+          Item-level parity is necessary but not sufficient; candidates sit forms, not items. The
+          test characteristic curve — expected raw score as a function of ability — is the
+          form-level statement of fairness, and it is checked for every assembled form before
+          release.
+        </p>
+
+        <figure class="fig-viz">
+          <div class="chart" id="pTcc"></div>
+          <div class="legend">
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-2)"></i>Form A (solid)</span>
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>Form B, independently generated variants (dashed)</span>
+          </div>
+          <figcaption style="font-size:var(--t-xs);color:var(--ink-3);margin-top:.8rem"><b class="mono">FIG 3</b> &nbsp;Test characteristic curves for two complete 60-item forms assembled from different variants of the same templates. Largest expected-score difference anywhere on the ability range: <b id="pTccOut">—</b> marks.</figcaption>
+        </figure>
+
+        <p>Assembly constraints applied to every form, in addition to the parity rules:</p>
+        <ul class="bullets">
+          <li><strong>Target information function.</strong> Every form must match the reference form's information curve within 3% at each of nine ability anchor points, so precision is equal where cut-scores fall.</li>
+          <li><strong>Content blueprint.</strong> Topic, sub-topic and cognitive-level counts are fixed by the blueprint and cannot be traded against difficulty.</li>
+          <li><strong>Answer-key balance.</strong> Key positions are balanced across the cohort so option order carries no signal.</li>
+          <li><strong>Time model.</strong> The sum of expected solve times must fall within ±90 seconds of the reference form.</li>
+        </ul>
+      </section>
+
+      <section id="linking" data-doc-sec>
+        <h2><span class="sn">Section 07</span>Linking and scale maintenance</h2>
+        <p>
+          Scores are reported on a stable scale across shifts, sessions and years. Three
+          mechanisms hold that scale in place.
+        </p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Mechanism</th><th>How it works</th><th>Frequency</th></tr></thead>
+            <tbody>
+              <tr><td>Common-item anchoring</td><td>A fixed anchor set of unvaried, fully calibrated items appears in every form, in identical wording, and carries the scale between forms.</td><td>Every form, ≥ 12 anchor items</td></tr>
+              <tr><td>Concurrent calibration</td><td>All forms in an administration are calibrated together in one run, so parameters are on one metric by construction rather than by transformation.</td><td>Per administration</td></tr>
+              <tr><td>Scale drift monitoring</td><td>Anchor-item parameters are compared against their historical values; drift beyond a control limit halts reporting and triggers re-linking.</td><td>Per shift</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Where shifts must be compared — as in any multi-session national examination — equating
+          is performed on the ability metric, not by percentile normalisation of raw scores. This
+          matters: percentile normalisation across shifts of unequal ability composition is the
+          source of much of the public distrust in existing multi-shift examinations, and IRT
+          linking removes the need for it.
+        </p>
+      </section>
+
+      <section id="exposure" data-doc-sec>
+        <h2><span class="sn">Section 08</span>Exposure control</h2>
+        <p>
+          Generation does not by itself solve exposure. If one template's variants are drawn far
+          more often than another's, that template becomes worth memorising. Exposure is therefore
+          managed explicitly.
+        </p>
+        <ul class="bullets">
+          <li><strong>Per-template exposure ceiling.</strong> No template may exceed a target proportion of the cohort, enforced by the sampler at draw time.</li>
+          <li><strong>No repeats within a cohort.</strong> Two candidates in the same administration never receive the identical parameter tuple from the same template.</li>
+          <li><strong>Family retirement.</strong> Cumulative exposure across administrations is tracked; families are retired on a schedule and replaced from the authoring pipeline.</li>
+          <li><strong>Late-arrival parity.</strong> A candidate starting twenty minutes late is drawn from the same live pool under the same ceilings — there is no leftover paper and no advantage to arriving late.</li>
+        </ul>
+      </section>
+
+      <section id="dif" data-doc-sec>
+        <h2><span class="sn">Section 09</span>Differential item functioning</h2>
+        <p>
+          Parity in aggregate can still hide unfairness for a subgroup — a generated variant set
+          in an unfamiliar context may be harder for rural candidates at the same ability, or a
+          Hindi rendering may not be of equal difficulty to its English source. DIF analysis is
+          run after every administration and its results are published, not filed.
+        </p>
+
+        <figure class="fig-viz">
+          <div class="chart" id="pDif"></div>
+          <div class="legend">
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1);width:10px;height:10px;border-radius:100px"></i>Observed Δb between subgroups</span>
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1);opacity:.45"></i>95% confidence interval</span>
+            <span class="legend__i"><i class="legend__key legend__key--band" style="background:var(--series-1);opacity:.18"></i>±0.05 tolerance</span>
+          </div>
+          <figcaption style="font-size:var(--t-xs);color:var(--ink-3);margin-top:.8rem"><b class="mono">FIG 4</b> &nbsp;Subgroup contrasts for the worked template. Illustrative values shown to demonstrate the analysis; real figures are published per administration.</figcaption>
+        </figure>
+
+        <ul class="bullets">
+          <li><strong>Method.</strong> Mantel–Haenszel with ETS A/B/C classification for flagging, plus IRT-based Δb comparison for magnitude, matched on ability rather than raw score.</li>
+          <li><strong>Contrasts.</strong> Language of delivery, urban/rural, gender, device tier, and state. Device tier is included because it is the contrast most specific to remote delivery and the one a centre-based exam never had to consider.</li>
+          <li><strong>Consequence.</strong> A family showing C-level DIF is withdrawn and its authors notified. Candidates who received the affected variant are re-scored without it.</li>
+          <li><strong>Translation.</strong> Hindi and English renderings are calibrated as separate items in the same family, never assumed equal because they are translations of one another.</li>
+        </ul>
+      </section>
+
+      <section id="validation" data-doc-sec>
+        <h2><span class="sn">Section 10</span>Validation protocol and limitations</h2>
+        <h3>Before an examination</h3>
+        <ol class="steps">
+          <li>Family seeding on a non-scoring cohort, minimum 1,200 responses per variant class.</li>
+          <li>Solver verification of every template transform, including adversarial parameter values at range boundaries.</li>
+          <li>Cognitive-lab review of a random variant sample by subject experts, blind to which is the parent item.</li>
+          <li>Simulated cohort run: 100,000 synthetic candidates across the ability range, checking recovery of true θ under randomised form assignment.</li>
+        </ol>
+        <h3>After an examination</h3>
+        <ol class="steps">
+          <li>Concurrent calibration of all delivered variants; comparison of realised against predicted parameters.</li>
+          <li>Regression of score on variant identity, conditioning on θ. <strong>The coefficient must be indistinguishable from zero.</strong> This is the falsification test in §1.</li>
+          <li>Full DIF sweep across the five contrasts, published with the results.</li>
+          <li>Publication of every delivered variant and its parameters, as answer keys are published today.</li>
+        </ol>
+
+        <h3>Limitations, stated plainly</h3>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Limitation</th><th>Why it exists</th><th>What we do about it</th></tr></thead>
+            <tbody>
+              <tr><td>Cold-start estimates are estimates</td><td>A never-sat variant has no response data; family priors and feature models are informed guesses with quantified error.</td><td>Seeding before scoring; online re-estimation; retrospective re-scoring when a variant drifts.</td></tr>
+              <tr><td>The 3PL assumes unidimensionality</td><td>Most competitive-exam subtests approximate it, but not perfectly.</td><td>Dimensionality checks per subtest; multidimensional models where the assumption fails, rather than ignoring it.</td></tr>
+              <tr><td>Response-time models are weaker than difficulty models</td><td>Time-to-solve varies more with candidate strategy than difficulty does.</td><td>A wider tolerance (±4 s) honestly reflecting lower precision, and form-level time bounds.</td></tr>
+              <tr><td>Constructed-response items are out of scope</td><td>Parity for free-text answers depends on marking equivalence, a different and harder problem.</td><td>v1.0 covers selected-response and numeric-entry only. We do not claim what we cannot show.</td></tr>
+              <tr><td>Templates can be badly written</td><td>A template whose "incidentals" are secretly radical will produce a wide family σ.</td><td>Family variance is monitored and reported back to authors; high-σ families are rejected, not tuned around.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note note--accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.4l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p><b>Position.</b> Dynamic generation raises the fairness bar, it does not lower it. A
+          single printed paper is only "fair" because everyone got the same one — a much weaker
+          guarantee than the one made here, and one that says nothing at all about whether the
+          paper measured what it claimed to.</p>
+        </div>
+      </section>
+
+      <div class="docnav">
+        <a href="architecture.html"><b>Previous</b><span>← System architecture</span></a>
+        <a href="pitch.html"><b>Next deliverable</b><span>Strategic pitch deck →</span></a>
+      </div>
+    </article>
+  </div>
+</div>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__bottom" style="border-top:0;padding-top:0">
+      <span>© <span data-year></span> TrustXD ExamOS. Concept document — figures are illustrative.</span>
+      <span><a href="index.html">Home</a> · <a href="prd.html">PRD</a> · <a href="architecture.html">Architecture</a> · <a href="pitch.html">Deck</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js" defer></script>
+<script src="assets/js/psychometrics.js" defer></script>
+</body>
+</html>

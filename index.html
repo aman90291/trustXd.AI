@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustXD ExamOS — zero-leakage assessment infrastructure</title>
+<meta name="description" content="TrustXD ExamOS pairs hardware-attested biometric identity with just-in-time AI paper generation, so national and university exams can be sat from home with cryptographic integrity.">
+<meta name="theme-color" content="#F4F3EF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='8' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%232540FF' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/core.css">
+<link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html" aria-label="TrustXD ExamOS home">
+      <svg class="brand__mark" viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 8l10 10M18 8L8 18" stroke="#2540FF" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="13" cy="13" r="3.2" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span class="brand__name"><b>TrustXD</b> <span>ExamOS</span></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#modules">Platform</a>
+      <a class="nav__link" href="#levels">Assurance</a>
+      <a class="nav__link" href="#parity">Psychometrics</a>
+      <a class="nav__link" href="architecture.html">Architecture</a>
+      <a class="nav__link" href="prd.html">PRD</a>
+      <a class="nav__link" href="pitch.html">Deck</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a class="btn btn--sm" href="#pilot" data-magnet="0.2">Request a pilot
+        <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="nav__burger" aria-label="Open menu" aria-expanded="false"><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" role="dialog" aria-label="Menu" aria-modal="true">
+  <ul class="menu__list">
+    <li class="menu__item"><a href="#modules">Platform</a></li>
+    <li class="menu__item"><a href="#levels">Assurance levels</a></li>
+    <li class="menu__item"><a href="#parity">Psychometrics</a></li>
+    <li class="menu__item"><a href="architecture.html">Architecture</a></li>
+    <li class="menu__item"><a href="prd.html">Product requirements</a></li>
+    <li class="menu__item"><a href="pitch.html">Pitch deck</a></li>
+  </ul>
+  <div class="menu__foot">
+    <p class="mono muted">TRUSTXD EXAMOS · <span data-year></span></p>
+    <a class="btn btn--accent btn--sm" href="#pilot">Request a pilot</a>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+
+  <div class="wrap hero__inner">
+    <div class="hero__top">
+      <span class="kicker">Assessment integrity infrastructure</span>
+      <span class="chip chip--accent">Level 3 · dual-camera + attested agent</span>
+    </div>
+
+    <h1 class="t-hero" data-split>No leaked paper. No proxy. <em class="ital">No exam hall.</em></h1>
+
+    <div class="hero__body">
+      <div>
+        <p class="lead" data-rise style="--d:.5s">
+          TrustXD ExamOS binds a candidate's identity to their hardware, their hardware to
+          their screen, and their screen to a question paper that did not exist until the
+          moment they authenticated.
+        </p>
+        <div class="hero__actions" data-rise style="--d:.62s">
+          <a class="btn btn--accent" href="#pilot" data-magnet="0.22">Request a pilot
+            <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#modules">See the protocol</a>
+        </div>
+      </div>
+
+      <div class="hero__side" data-rise style="--d:.74s">
+        <p class="mono muted" style="letter-spacing:.14em">TRUST CHAIN · SELECT A LINK</p>
+        <div class="morphs" role="group" aria-label="Trust chain visualisation">
+          <button class="morph-btn" type="button" aria-pressed="true">Identity<i class="morph-btn__bar"></i></button>
+          <button class="morph-btn" type="button" aria-pressed="false">Attestation<i class="morph-btn__bar"></i></button>
+          <button class="morph-btn" type="button" aria-pressed="false">Paper<i class="morph-btn__bar"></i></button>
+          <button class="morph-btn" type="button" aria-pressed="false">Scale<i class="morph-btn__bar"></i></button>
+        </div>
+        <p class="muted" style="font-size:var(--t-sm);max-width:34ch">
+          Four states of one session. Each link is independently provable, and the paper
+          only unlocks when the three before it hold.
+        </p>
+      </div>
+    </div>
+
+    <div class="statrail" data-stagger="0.08">
+      <div class="statrail__i">
+        <span class="statrail__v">0</span>
+        <span class="statrail__k">question papers in existence before a candidate authenticates</span>
+      </div>
+      <div class="statrail__i">
+        <span class="statrail__v">2</span>
+        <span class="statrail__k">synchronised camera angles, temporally cross-matched</span>
+      </div>
+      <div class="statrail__i">
+        <span class="statrail__v">3</span>
+        <span class="statrail__k">permitted verdicts — Clear, Review required, Not assessable</span>
+      </div>
+      <div class="statrail__i">
+        <span class="statrail__v">±0.05</span>
+        <span class="statrail__k">logit tolerance on the difficulty of every generated variant</span>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:end;padding-top:clamp(1.5rem,3vw,2.5rem);gap:1rem;flex-wrap:wrap">
+      <span class="scrollcue"><i></i> Scroll</span>
+      <span class="mono dim">EST. 2026 · BENGALURU</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TICKER ══════════════ -->
+<section class="ticker" aria-label="Exam formats supported">
+  <div class="marquee">
+    <div class="marquee__track">
+      <span class="ticker__item">NEET UG</span><span class="ticker__item">JEE Main</span>
+      <span class="ticker__item">JEE Advanced</span><span class="ticker__item">UPSC CSE</span>
+      <span class="ticker__item">IBPS PO</span><span class="ticker__item">SSC CGL</span>
+      <span class="ticker__item">CUET UG</span><span class="ticker__item">GATE</span>
+      <span class="ticker__item">VITEEE</span><span class="ticker__item">SRMJEEE</span>
+      <span class="ticker__item">MET</span><span class="ticker__item">CAT</span>
+      <span class="ticker__item">State CETs</span>
+    </div>
+  </div>
+  <div class="wrap ticker__note">
+    <p class="mono dim" style="text-transform:none;letter-spacing:.04em">
+      Exam names denote format compatibility only. No affiliation with, or endorsement by, any testing agency, board or university is implied.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 01 · FAILURE MODES ══════════════ -->
+<section class="section" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">01 — The premise</span>
+        <span class="kicker kicker--plain muted">Why exams break</span>
+      </div>
+      <h2 class="t-d1" data-split>Three failures. One root cause: <em class="ital">the secret is kept too long, by too many.</em></h2>
+    </div>
+
+    <div class="fail" data-stagger="0.1">
+      <article class="fail__i">
+        <span class="fail__n">Failure 01</span>
+        <h3 class="fail__h">The paper exists before the exam</h3>
+        <p class="fail__p">A printed paper is a valuable secret held by presses, couriers, strongrooms and centre staff for weeks. A leak is not an anomaly in that design — it is the design working exactly as built.</p>
+        <p class="fail__fix"><b>We fix it</b> <span>Nothing to steal. Papers are assembled per candidate at T−0 inside a sealed pipeline, and the ciphertext is useless until identity clears.</span></p>
+      </article>
+      <article class="fail__i">
+        <span class="fail__n">Failure 02</span>
+        <h3 class="fail__h">Identity is checked once, at a desk</h3>
+        <p class="fail__p">A photograph, a signature, a tired invigilator at 9 a.m. Proxy substitution survives because verification is treated as a moment rather than a continuously held state.</p>
+        <p class="fail__fix"><b>We fix it</b> <span>Two cameras, one subject, cross-matched frame by frame — and a sealed chip proving the frames came from real hardware.</span></p>
+      </article>
+      <article class="fail__i">
+        <span class="fail__n">Failure 03</span>
+        <h3 class="fail__h">Integrity is reported as a score</h3>
+        <p class="fail__p">Remote proctoring returns a probability — "87% suspicious" — and a career turns on it. A candidate cannot cross-examine a number, and a court cannot audit one.</p>
+        <p class="fail__fix"><b>We fix it</b> <span>No risk scores. Timestamped, deterministic event records; three permitted verdicts; a named human on every flag.</span></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 02 · THREE LOCKS ══════════════ -->
+<section class="section section--sunk" id="locks">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">02 — The model</span>
+        <span class="kicker kicker--plain muted">Chain of custody</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>Three locks in series. The paper is the last thing to open.</h2>
+        <p class="lead" style="margin-top:1.5rem" data-rise>Each lock is independently verifiable and independently auditable. Breaking one does not weaken the others — it stops the session.</p>
+      </div>
+    </div>
+
+    <div class="locks" data-stagger="0.09">
+      <article class="lock">
+        <span class="card__label">Lock 01 · Module A</span>
+        <div class="lock__viz">
+          <svg viewBox="0 0 260 132" fill="none" aria-hidden="true">
+            <rect x="6" y="18" width="96" height="68" rx="8" stroke="var(--line-strong)"/>
+            <rect x="158" y="18" width="96" height="68" rx="8" stroke="var(--line-strong)"/>
+            <ellipse cx="54" cy="54" rx="19" ry="23" stroke="var(--ink-2)"/>
+            <circle cx="47" cy="49" r="2" fill="var(--ink-2)"/><circle cx="61" cy="49" r="2" fill="var(--ink-2)"/>
+            <path d="M54 54v9l-4 2" stroke="var(--ink-2)" stroke-linecap="round"/>
+            <path d="M46 70q8 5 16 0" stroke="var(--ink-2)" stroke-linecap="round"/>
+            <path d="M191 76c-4-19 5-36 20-36 11 0 17 8 17 17l-1 5 8 12-7 2 1 4q2 4-3 5v6q-1 7-11 8l-10 1c-11 0-13-10-14-24z" stroke="var(--ink-2)"/>
+            <circle cx="219" cy="55" r="1.8" fill="var(--ink-2)"/>
+            <path d="M110 56q20-20 42 0" stroke="#2540FF" stroke-dasharray="3 4" stroke-linecap="round"/>
+            <text x="131" y="36" font-size="9" fill="#2540FF" text-anchor="middle" font-family="monospace">78°</text>
+            <path d="M20 116h220" stroke="var(--line)"/>
+            <path d="M20 116q28-11 44 0t44 0 44 0 44 0 44 0" stroke="#2540FF" stroke-width="1.4" opacity=".8"/>
+          </svg>
+        </div>
+        <h3>Identity lock</h3>
+        <p>Government ID parsed on-device, active liveness, and a second camera at 60°–120° whose head-motion vector must correlate with the first in real time.</p>
+        <div class="lock__foot">
+          <span class="mono dim">CORR ≥ 0.94</span>
+          <span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Held</span>
+        </div>
+      </article>
+
+      <article class="lock">
+        <span class="card__label">Lock 02 · Module B</span>
+        <div class="lock__viz">
+          <svg viewBox="0 0 260 132" fill="none" aria-hidden="true">
+            <rect x="14" y="16" width="128" height="82" rx="6" stroke="var(--line-strong)"/>
+            <path d="M64 98v12h28V98M52 110h52" stroke="var(--line-strong)" stroke-linecap="round"/>
+            <rect x="38" y="42" width="80" height="26" rx="4" fill="#0B0C0E"/>
+            <text x="78" y="60" font-size="13" fill="#fff" text-anchor="middle" font-family="monospace" letter-spacing="2">4F7A</text>
+            <rect x="192" y="26" width="52" height="88" rx="9" stroke="var(--line-strong)"/>
+            <rect x="199" y="36" width="38" height="60" rx="3" fill="var(--paper-sunk)"/>
+            <text x="218" y="70" font-size="9" fill="#2540FF" text-anchor="middle" font-family="monospace" letter-spacing="1">4F7A</text>
+            <path d="M150 56h34" stroke="#2540FF" stroke-dasharray="4 4" stroke-linecap="round"/>
+            <path d="M180 52l6 4-6 4" stroke="#2540FF" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="167" y="46" font-size="8.5" fill="var(--ink-3)" text-anchor="middle" font-family="monospace">412ms</text>
+          </svg>
+        </div>
+        <h3>Display lock</h3>
+        <p>The server paints a 3-second token on the exam screen. The phone reads it and reports back over an independent channel. Arrive late, or point at a decoy, and the lapse is recorded.</p>
+        <div class="lock__foot">
+          <span class="mono dim">WINDOW 2000 MS</span>
+          <span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Held</span>
+        </div>
+      </article>
+
+      <article class="lock">
+        <span class="card__label">Lock 03 · Module C</span>
+        <div class="lock__viz">
+          <svg viewBox="0 0 260 132" fill="none" aria-hidden="true">
+            <rect x="16" y="20" width="92" height="92" rx="10" stroke="var(--line-strong)"/>
+            <circle cx="62" cy="66" r="20" stroke="var(--ink-2)"/>
+            <circle cx="62" cy="66" r="7" stroke="var(--ink-2)"/>
+            <path d="M62 59V44M62 88V73M45 66H30M94 66H79" stroke="var(--ink-2)" stroke-linecap="round"/>
+            <path d="M120 66h30" stroke="#2540FF" stroke-dasharray="4 4"/>
+            <path d="M146 62l6 4-6 4" stroke="#2540FF" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="162" y="18" width="76" height="96" rx="6" fill="#fff" stroke="var(--line-strong)"/>
+            <path d="M176 40h48M176 54h48M176 68h34M176 82h42M176 96h28" stroke="var(--line-strong)" stroke-linecap="round"/>
+            <circle cx="228" cy="104" r="12" fill="#2540FF"/>
+            <path d="M223 104l3.4 3.4L233 100.6" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Paper lock</h3>
+        <p>Encrypted item bank, opened only after locks one and two hold. The generator then re-parameterises every item for that candidate — while the IRT calibrator holds difficulty constant.</p>
+        <div class="lock__foot">
+          <span class="mono dim">RELEASE AT T−0</span>
+          <span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Held</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 03 · MODULES ══════════════ -->
+<section class="section" id="modules">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">03 — The system</span>
+        <span class="kicker kicker--plain muted">Five modules</span>
+      </div>
+      <h2 class="t-d1" data-split>Everything below runs on the candidate's own two devices.</h2>
+    </div>
+
+    <div class="mods">
+      <aside class="mods__rail">
+        <nav class="mods__nav" aria-label="Modules">
+          <a class="mods__navbtn is-active" href="#mod-a"><span>A</span> Biometric KYC</a>
+          <a class="mods__navbtn" href="#mod-b"><span>B</span> Screen binding</a>
+          <a class="mods__navbtn" href="#mod-c"><span>C</span> JIT exam engine</a>
+          <a class="mods__navbtn" href="#mod-d"><span>D</span> Evidence engine</a>
+          <a class="mods__navbtn" href="#mod-e"><span>E</span> Candidate rights</a>
+        </nav>
+        <p class="muted" style="font-size:var(--t-xs);margin-top:1.5rem;max-width:24ch">
+          Each panel below is a working simulation of the protocol it describes. Nothing here calls a network.
+        </p>
+      </aside>
+
+      <div>
+        <!-- ---------- MODULE A ---------- -->
+        <article class="mod" id="mod-a">
+          <div class="mod__head">
+            <h3>Hardware-attested biometric KYC and dual-angle spatial verification</h3>
+            <span class="chip">Module A</span>
+          </div>
+          <p class="mod__lead">
+            A deepfake can hold a front-facing camera. It cannot hold two cameras, at an
+            arbitrary angle to each other, and keep both stories straight while a person is
+            asked to turn their head and show the back of their ear.
+          </p>
+
+          <div class="mod__viz" data-wipe>
+            <div class="rig" data-rig>
+              <!-- primary -->
+              <div class="rig__cam">
+                <div class="rig__camhead">
+                  <span class="card__label">Primary · laptop webcam</span>
+                  <span class="mono dim">1080p · 30fps</span>
+                </div>
+                <div class="rig__feed">
+                  <span class="rig__rec">LIVE</span>
+                  <svg viewBox="0 0 180 156" fill="none" aria-hidden="true">
+                    <g data-rig-front stroke="var(--ink-2)" stroke-width="1.2">
+                      <ellipse cx="90" cy="78" rx="33" ry="43"/>
+                      <path d="M62 66q10-6 18 0M100 66q8-6 18 0" opacity=".55"/>
+                      <circle cx="76" cy="72" r="2.4" fill="var(--ink-2)"/>
+                      <circle cx="104" cy="72" r="2.4" fill="var(--ink-2)"/>
+                      <path d="M90 76v14l-5 3" stroke-linecap="round"/>
+                      <path d="M80 100q10 7 20 0" stroke-linecap="round"/>
+                      <g opacity=".38" stroke="#2540FF" stroke-width=".8">
+                        <path d="M57 78h66M62 60h56M62 96h56M90 35v86"/>
+                        <path d="M67 44q23 12 46 0M67 112q23-12 46 0"/>
+                      </g>
+                    </g>
+                  </svg>
+                  <span class="rig__meta">mesh 468 pts</span>
+                </div>
+              </div>
+
+              <!-- secondary -->
+              <div class="rig__cam">
+                <div class="rig__camhead">
+                  <span class="card__label">Secondary · attested phone</span>
+                  <span class="mono dim">offset <b data-rig-offset>78°</b></span>
+                </div>
+                <div class="rig__feed">
+                  <span class="rig__rec">LIVE</span>
+                  <svg viewBox="0 0 180 156" fill="none" aria-hidden="true">
+                    <g data-rig-side stroke="var(--ink-2)" stroke-width="1.2" fill="none">
+                      <path d="M60 84C58 52 74 32 98 32c20 0 30 14 29 28l-3 8 12 18-12 4 2 6-4 4 3 4-3 8c-2 12-14 16-26 16-22 0-34-14-36-44z" stroke-linejoin="round"/>
+                      <circle cx="112" cy="66" r="2.6" fill="var(--ink-2)"/>
+                      <path d="M105 58q8-3 14 1" stroke-linecap="round" opacity=".7"/>
+                      <ellipse cx="82" cy="82" rx="7" ry="9" opacity=".6"/>
+                      <path d="M80 78q4 4 1 9" opacity=".6" stroke-linecap="round"/>
+                      <g opacity=".4" stroke="#2540FF" stroke-width=".8">
+                        <path d="M62 56q30-4 58 6M60 78q34-2 64 8M66 102q28-2 52 6"/>
+                      </g>
+                    </g>
+                  </svg>
+                  <span class="rig__meta">attested · Play Integrity</span>
+                </div>
+              </div>
+
+              <!-- controls -->
+              <div class="rig__ctrl">
+                <div class="rig__slider">
+                  <label for="rigRange">Head yaw <span class="mono" data-rig-yaw>+0°</span></label>
+                  <input id="rigRange" type="range" min="-35" max="35" value="0" step="1" data-rig-range aria-describedby="rigHelp">
+                  <p id="rigHelp" class="muted" style="font-size:var(--t-xs)">Drag to move the candidate's head. Both feeds are driven by the same physical motion.</p>
+                </div>
+                <div>
+                  <div class="rig__match">
+                    <span class="mono dim" style="flex:none">TEMPORAL CORR</span>
+                    <span class="rig__meter"><i data-rig-meter></i></span>
+                    <b class="mono num" data-rig-match style="flex:none">0.981</b>
+                  </div>
+                  <div style="display:flex;gap:1rem;align-items:center;justify-content:space-between;margin-top:.9rem;flex-wrap:wrap">
+                    <span class="verdict verdict--clear" data-rig-verdict>Single subject</span>
+                    <label class="switch">
+                      <input type="checkbox" data-rig-proxy>
+                      <span class="switch__ui"></span>
+                      <span class="muted" style="font-size:var(--t-xs)">Simulate proxy sitter</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod__points">
+            <div class="mod__point">
+              <h4>Document parsing on device</h4>
+              <p>Aadhaar, passport or driving licence OCR runs client-side; only the extracted field hashes and a match decision leave the machine.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Active liveness, not passive</h4>
+              <p>Randomised prompts — rotate to 45°, show the left ear, follow the dot — scored against a 468-point facial mesh and depth symmetry.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Hardware root of trust</h4>
+              <p>The phone app signs every media payload with Apple App Attest or Android Play Integrity. Emulators, rooted devices and virtual cameras fail the chain, not the model.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Angle enforcement</h4>
+              <p>The rig must sit between 60° and 120° of the primary axis. Outside that window the session cannot start — geometry is a precondition, not a score.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ---------- MODULE B ---------- -->
+        <article class="mod" id="mod-b">
+          <div class="mod__head">
+            <h3>Cryptographic screen-binding and anti-spoofing</h3>
+            <span class="chip">Module B</span>
+          </div>
+          <p class="mod__lead">
+            Knowing who is in the room is only half the problem. The other half is proving that
+            the screen the phone can see is the screen the exam is running on.
+          </p>
+
+          <div class="mod__viz" data-wipe>
+            <div class="bind" data-bind>
+              <div class="bind__pane">
+                <div class="bind__head">
+                  <span class="card__label">Primary display · exam client</span>
+                  <span class="mono dim" data-bind-seq>seq 1180</span>
+                </div>
+                <div class="bind__screen">
+                  <div class="bind__scan" aria-hidden="true"></div>
+                  <span class="mono" style="color:rgba(244,243,239,.5)">SESSION TOKEN · TTL 3s</span>
+                  <span class="bind__token" data-bind-token>····-····</span>
+                  <span class="bind__ring" aria-hidden="true">
+                    <svg width="40" height="40" viewBox="0 0 40 40">
+                      <circle class="trk" cx="20" cy="20" r="17"/>
+                      <circle class="val" cx="20" cy="20" r="17" data-bind-ring stroke-dasharray="107" stroke-dashoffset="0"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <div class="bind__pane bind__pane--sec">
+                <div class="bind__head">
+                  <span class="card__label">Secondary camera · read-back</span>
+                  <span class="verdict verdict--clear" data-bind-state>
+                    <svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Display bound
+                  </span>
+                </div>
+                <div class="bind__cam">
+                  <div class="bind__reticle" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                  <span class="bind__camread" data-bind-cam>· · · ·</span>
+                </div>
+                <div class="bind__lat">
+                  <span class="mono dim" style="flex:none">RTT</span>
+                  <span class="bind__latbar" data-bind-latbar><i style="width:22%"></i></span>
+                  <b class="mono num" data-bind-lat style="flex:none">412 ms</b>
+                </div>
+                <label class="switch" style="margin-top:.9rem">
+                  <input type="checkbox" data-bind-decoy>
+                  <span class="switch__ui"></span>
+                  <span class="muted" style="font-size:var(--t-xs)">Point the phone at a decoy display</span>
+                </label>
+              </div>
+
+              <div class="bind__log">
+                <div class="bind__head">
+                  <span class="card__label">Server event log · append-only</span>
+                  <span class="mono dim">CLOCK: NTP-DISCIPLINED</span>
+                </div>
+                <ul class="logfeed" data-bind-log aria-live="polite" aria-label="Server event log"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod__points">
+            <div class="mod__point">
+              <h4>Independent channel</h4>
+              <p>The read-back travels over the phone's own WebSocket, not the laptop's. A compromised exam machine cannot forge its own confirmation.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Server clock is authoritative</h4>
+              <p>Validity is measured against the server's own NTP-disciplined clock, so client clock drift or replay buys an attacker nothing.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Decoys collapse immediately</h4>
+              <p>A wall, a photograph or a second monitor produces a stale token or none at all. Either way the mismatch is written to the record within one cycle.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Lapse ≠ accusation</h4>
+              <p>A lapse is an event, not a verdict. It routes the session to a human reviewer with the exact clip and timestamps attached.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ---------- MODULE C ---------- -->
+        <article class="mod" id="mod-c">
+          <div class="mod__head">
+            <h3>Just-in-time exam generation with psychometric parity</h3>
+            <span class="chip">Module C</span>
+          </div>
+          <p class="mod__lead">
+            The paper is assembled after the candidate is proven, not before. Every candidate
+            receives a different surface — and, by construction, the same test.
+          </p>
+
+          <div class="mod__viz" data-wipe>
+            <div class="pipe" data-jit>
+              <div class="pipe__flow">
+                <div class="pipe__step" data-pipe-step><b>01</b><span>Sealed item bank</span></div>
+                <div class="pipe__step" data-pipe-step><b>02</b><span>Identity gate L3</span></div>
+                <div class="pipe__step" data-pipe-step><b>03</b><span>Variation engine</span></div>
+                <div class="pipe__step" data-pipe-step><b>04</b><span>IRT calibrator</span></div>
+                <div class="pipe__step" data-pipe-step><b>05</b><span>Sealed delivery</span></div>
+              </div>
+
+              <div class="variant">
+                <div class="variant__card">
+                  <div class="variant__head">
+                    <span class="card__label">Canonical item</span>
+                    <span class="mono dim">PHY-1104</span>
+                  </div>
+                  <p class="variant__q">A cyclist of combined mass <mark>60 kg</mark> is moving at <mark>8 m s⁻¹</mark>. Brakes bring the cycle uniformly to rest over <mark>4 m</mark>. Find the magnitude of the average retarding force.</p>
+                  <div class="variant__params">
+                    <span>a <b>1.240</b></span><span>b <b>0.380</b></span><span>c <b>0.200</b></span>
+                    <span>time <b>96 s</b></span>
+                  </div>
+                </div>
+
+                <div class="variant__card variant__card--b">
+                  <div class="variant__head">
+                    <span class="card__label">Delivered to this candidate</span>
+                    <span class="mono dim" data-jit-id>PHY-1104-V001</span>
+                  </div>
+                  <p class="variant__q" data-jit-q></p>
+                  <div class="variant__params">
+                    <span>a <b data-jit-a>1.242</b></span><span>b <b data-jit-b>0.374</b></span>
+                    <span>c <b data-jit-c>0.200</b></span><span>time <b>96 s</b></span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:1rem;align-items:center;justify-content:space-between;margin-top:1.25rem;flex-wrap:wrap">
+                <p class="muted" style="font-size:var(--t-xs);max-width:56ch">
+                  Names, places, numeric parameters, option order and phrasing all move. The
+                  difficulty, the cognitive operation and the expected solve time do not.
+                </p>
+                <button class="btn btn--ghost btn--sm" type="button" data-jit-new data-cursor="Generate">Generate another variant</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod__points">
+            <div class="mod__point">
+              <h4>Zero-leakage delivery gate</h4>
+              <p>Papers stay encrypted server-side. The decryption key is derived only after Level 3 identity and screen-binding both hold, and is never persisted on the client.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Late arrivals are covered</h4>
+              <p>A candidate who starts twenty minutes late gets a freshly generated paper, not a leftover one. There is no window in which an earlier paper helps a later candidate.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Generation is bounded</h4>
+              <p>The model rewrites within a template's declared parameter ranges and answer-preserving transforms. It does not invent physics, and every variant is machine-solved before release.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Parity is enforced, not hoped for</h4>
+              <p>Variants outside the ±0.05 logit band are rejected by the calibrator and never reach a candidate. <a class="link" href="#parity">See the curves ↓</a></p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ---------- MODULE D ---------- -->
+        <article class="mod" id="mod-d">
+          <div class="mod__head">
+            <h3>Deterministic evidence and human-in-the-loop review</h3>
+            <span class="chip">Module D</span>
+          </div>
+          <p class="mod__lead">
+            No integrity scores. No automated rejections. A machine may only observe and record;
+            a trained human decides, and the candidate can read the same record the reviewer read.
+          </p>
+
+          <div class="mod__viz" data-wipe>
+            <div class="evidence" data-evidence>
+              <div class="evidence__pane">
+                <div class="bind__head">
+                  <span class="card__label">Review queue · today</span>
+                  <span class="mono dim">3 OF 214,806 SESSIONS</span>
+                </div>
+                <div class="queue">
+                  <button class="queue__row is-sel" data-case="S-77401" type="button">
+                    <span>
+                      <span class="queue__id">S-77401 · 11:42 IST</span>
+                      <span class="queue__what">Secondary stream interrupted mid-paper</span>
+                    </span>
+                    <span class="verdict verdict--review">
+                      <svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.6l5 8.8H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 5v2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Review
+                    </span>
+                  </button>
+                  <button class="queue__row" data-case="S-77418" type="button">
+                    <span>
+                      <span class="queue__id">S-77418 · 09:15 IST</span>
+                      <span class="queue__what">Full session, no flags raised</span>
+                    </span>
+                    <span class="verdict verdict--clear">
+                      <svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear
+                    </span>
+                  </button>
+                  <button class="queue__row" data-case="S-77426" type="button">
+                    <span>
+                      <span class="queue__id">S-77426 · 14:03 IST</span>
+                      <span class="queue__what">Lighting prevented reliable capture</span>
+                    </span>
+                    <span class="verdict verdict--null">
+                      <svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.6 6h4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Not assessable
+                    </span>
+                  </button>
+                </div>
+
+                <div class="noscore">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M4 11L11 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  <span><b>No integrity score exists in this system.</b> There is no field to store one, no API that returns one, and no configuration that enables one.</span>
+                </div>
+              </div>
+
+              <div class="evidence__pane card--sunk">
+                <div class="bind__head">
+                  <span class="card__label" data-trail-head>Session S-77401 · Level 3</span>
+                  <span class="verdict verdict--review" data-trail-verdict>Review required</span>
+                </div>
+                <ul class="trail" data-trail></ul>
+                <p class="muted" style="font-size:var(--t-xs);margin-top:1rem">
+                  The candidate receives this same trail, plus a log of every reviewer who opened it.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod__points">
+            <div class="mod__point">
+              <h4>Exactly three verdicts</h4>
+              <p><b>Clear</b>, <b>Review required</b>, <b>Not assessable</b>. There is no fourth outcome, and "Not assessable" always carries a remedy — a free re-sit, never a penalty.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Reviewers are independent</h4>
+              <p>Reviewers are not employed by the institution whose exam they are reviewing, are randomly assigned, and see the evidence before they see the candidate's name.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Every record is reproducible</h4>
+              <p>Given the same inputs the engine emits byte-identical events. A tribunal can replay a session and get the same trail three years later.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Appeals are first-class</h4>
+              <p>A candidate can open a dispute from inside their own report. The clock on evidence retention pauses for the duration of the appeal.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- ---------- MODULE E ---------- -->
+        <article class="mod" id="mod-e">
+          <div class="mod__head">
+            <h3>Candidate rights, consent and data minimisation</h3>
+            <span class="chip">Module E</span>
+          </div>
+          <p class="mod__lead">
+            A surveillance system that a candidate cannot see, understand or contest is not a
+            trust system. Everything captured is visible to the person it was captured from.
+          </p>
+
+          <div class="mod__viz" data-wipe>
+            <div class="consent" data-consent>
+              <div class="consent__pane">
+                <div class="bind__head">
+                  <span class="card__label" data-en="Itemised consent · DPDP Act, 2023" data-hi="मद-वार सहमति · DPDP अधिनियम, 2023">Itemised consent · DPDP Act, 2023</span>
+                  <span class="lang">
+                    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" data-lang="hi" aria-pressed="false">हिं</button>
+                  </span>
+                </div>
+                <div class="consent__list">
+                  <div class="consent__row">
+                    <p><span data-en="Primary camera" data-hi="प्राथमिक कैमरा">Primary camera</span><small data-en="Face capture for identity and liveness" data-hi="पहचान और जीवंतता के लिए चेहरा कैप्चर">Face capture for identity and liveness</small></p>
+                    <label class="switch"><input type="checkbox" checked><span class="switch__ui" style="background:var(--st-clear-bg)"></span></label>
+                  </div>
+                  <div class="consent__row">
+                    <p><span data-en="Secondary camera" data-hi="द्वितीयक कैमरा">Secondary camera</span><small data-en="Profile view and screen-binding read-back" data-hi="प्रोफ़ाइल दृश्य और स्क्रीन-बाइंडिंग">Profile view and screen-binding read-back</small></p>
+                    <label class="switch"><input type="checkbox" checked><span class="switch__ui" style="background:var(--st-clear-bg)"></span></label>
+                  </div>
+                  <div class="consent__row">
+                    <p><span data-en="Microphone" data-hi="माइक्रोफ़ोन">Microphone</span><small data-en="Ambient audio, kept 30 days if flagged" data-hi="परिवेशी ऑडियो, फ़्लैग होने पर 30 दिन">Ambient audio, kept 30 days if flagged</small></p>
+                    <label class="switch"><input type="checkbox" checked><span class="switch__ui" style="background:var(--st-clear-bg)"></span></label>
+                  </div>
+                  <div class="consent__row">
+                    <p><span data-en="Government ID scan" data-hi="सरकारी पहचान पत्र स्कैन">Government ID scan</span><small data-en="Parsed on device; number never stored in clear" data-hi="डिवाइस पर पार्स; संख्या कभी सादे रूप में संग्रहित नहीं">Parsed on device; number never stored in clear</small></p>
+                    <label class="switch"><input type="checkbox" checked><span class="switch__ui" style="background:var(--st-clear-bg)"></span></label>
+                  </div>
+                </div>
+                <p class="muted" style="font-size:var(--t-xs);margin-top:1rem" data-en="Each item is granted separately and can be withdrawn between sessions. Withdrawal ends eligibility for the assurance level that needs it — it never silently downgrades the session." data-hi="प्रत्येक मद अलग से दी जाती है और सत्रों के बीच वापस ली जा सकती है। वापसी उस आश्वासन स्तर की पात्रता समाप्त करती है — सत्र कभी चुपचाप डाउनग्रेड नहीं होता।">Each item is granted separately and can be withdrawn between sessions. Withdrawal ends eligibility for the assurance level that needs it — it never silently downgrades the session.</p>
+              </div>
+
+              <div class="consent__pane">
+                <div class="bind__head">
+                  <span class="card__label" data-en="Digital consent receipt" data-hi="डिजिटल सहमति रसीद">Digital consent receipt</span>
+                  <span class="chip">Verifiable</span>
+                </div>
+                <div class="receipt">
+                  <div>receipt_id &nbsp;<b>rcpt_7f31c9a4e2</b></div>
+                  <div>subject &nbsp;&nbsp;&nbsp;<b>cand_9d41…a07f</b></div>
+                  <div>granted &nbsp;&nbsp;&nbsp;<b>cam.primary, cam.secondary, mic.ambient, id.scan</b></div>
+                  <div>purpose &nbsp;&nbsp;&nbsp;<b>exam_integrity_only</b></div>
+                  <div>retention <b>P30D · flagged clips only</b></div>
+                  <div>issued &nbsp;&nbsp;&nbsp;&nbsp;<b>2026-07-30T09:11:04+05:30</b></div>
+                  <div>signature <b>ed25519:3a91…c04d</b></div>
+                </div>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem">
+                  <span class="chip">Self-view always on</span>
+                  <span class="chip">Access log visible</span>
+                  <span class="chip">Auto-purge P30D</span>
+                  <span class="chip">Export on request</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod__points">
+            <div class="mod__point">
+              <h4>Continuous self-view</h4>
+              <p>The candidate sees their own secondary stream at full size for the whole session, so what is captured is never a surprise.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Bilingual by default</h4>
+              <p>Consent, prompts and the final report ship in English and Hindi, with the language pack extensible to any scheduled language.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Who read your file</h4>
+              <p>Every access to a candidate's evidence — reviewer, auditor, agency — appears in the candidate's own transparency log.</p>
+            </div>
+            <div class="mod__point">
+              <h4>Purge is automatic</h4>
+              <p>Unflagged media is discarded when the session closes. Flagged clips expire at 30 days unless an appeal holds them, and the purge itself is logged.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 04 · ASSURANCE LEVELS ══════════════ -->
+<section class="section section--sunk" id="levels">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">04 — Deployment</span>
+        <span class="kicker kicker--plain muted">Three levels of assurance</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>Match the stakes. Nothing heavier, nothing lighter.</h2>
+        <p class="lead" style="margin-top:1.5rem" data-rise>An institution declares the level; the candidate sees the level before they consent; the certificate records the level it was earned under.</p>
+      </div>
+    </div>
+
+    <div class="levels" data-stagger="0.09">
+      <article class="level">
+        <span class="level__n">Level 1 <b>Low stakes</b></span>
+        <div class="level__meter" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+        <h3>Browser &amp; webcam</h3>
+        <ul class="level__list">
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Single-camera identity check at start</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Static item bank with option shuffling</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Event log, no continuous media retention</li>
+        </ul>
+        <p class="level__use">Formative assessment, practice tests, internal coursework.</p>
+      </article>
+
+      <article class="level">
+        <span class="level__n">Level 2 <b>Medium stakes</b></span>
+        <div class="level__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>
+        <h3>Dual camera, browser + app</h3>
+        <ul class="level__list">
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Dual-angle spatial verification</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Screen-binding token loop</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>JIT variant generation with IRT parity</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="var(--st-clear)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Human review on every flag</li>
+        </ul>
+        <p class="level__use">University entrance tests, hiring assessments, structured interviews.</p>
+      </article>
+
+      <article class="level level--hi">
+        <span class="level__n">Level 3 <b>National scale</b></span>
+        <div class="level__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        <h3>Dual camera + attested status agent</h3>
+        <ul class="level__list">
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="#7FE07F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Level 2, plus</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="#7FE07F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Sealed-chip attestation on every media payload</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="#7FE07F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Lightweight system status agent — display topology, virtual-camera and remote-desktop detection</li>
+          <li><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="#7FE07F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Independent reviewer pool with agency observer access</li>
+        </ul>
+        <p class="level__use">NEET, JEE, UPSC, banking recruitment and state common entrance tests.</p>
+      </article>
+    </div>
+
+    <p class="muted" style="font-size:var(--t-sm);margin-top:1.5rem;max-width:70ch" data-rise>
+      The status agent reports state, not content. It has no keylogger, reads no files, and
+      inspects no other application's memory — it answers a fixed set of questions about
+      displays, capture devices and remote sessions, and it uninstalls itself when the exam ends.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 05 · RUNTIME ══════════════ -->
+<section class="section" id="runtime">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">05 — Exam day</span>
+        <span class="kicker kicker--plain muted">Session runtime</span>
+      </div>
+      <h2 class="t-d1" data-split>Forty-five minutes of proving. Then the paper appears.</h2>
+    </div>
+
+    <div class="runtime" data-runtime>
+      <div class="runtime__sticky">
+        <span class="kicker kicker--accent">Session clock</span>
+        <p class="runtime__clock" data-runtime-clock>T−45:00</p>
+        <p class="runtime__phase" data-runtime-phase>Device readiness</p>
+        <div class="runtime__bar"><i data-runtime-bar></i></div>
+        <p class="muted" style="font-size:var(--t-sm);margin-top:1.5rem;max-width:30ch">
+          Every step is reversible up to T−0. After the paper releases, the session may pause
+          but never restarts.
+        </p>
+      </div>
+
+      <div class="steps">
+        <article class="step is-active" data-clock="T−45:00" data-phase="Device readiness">
+          <span class="step__t">T−45:00</span>
+          <div>
+            <h4>Device readiness</h4>
+            <p>Bandwidth, camera resolution, battery headroom and phone-mount geometry are checked. Failures here are cheap; failures at T−2 are not.</p>
+            <div class="step__tags"><span class="chip">≥ 1.5 Mbps up</span><span class="chip">Battery ≥ 40%</span><span class="chip">Rig 60°–120°</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−30:00" data-phase="Itemised consent">
+          <span class="step__t">T−30:00</span>
+          <div>
+            <h4>Itemised consent</h4>
+            <p>Each capture right is granted separately, in the candidate's chosen language, and a signed receipt is issued to the candidate before anything is recorded.</p>
+            <div class="step__tags"><span class="chip">EN / HI</span><span class="chip">Ed25519 receipt</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−22:00" data-phase="Document &amp; liveness">
+          <span class="step__t">T−22:00</span>
+          <div>
+            <h4>Document and liveness</h4>
+            <p>ID is parsed on device and matched against a live 3D facial mesh under randomised movement prompts. The ID number never leaves the machine in clear text.</p>
+            <div class="step__tags"><span class="chip">On-device OCR</span><span class="chip">468-pt mesh</span><span class="chip">Active prompts</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−15:00" data-phase="Dual-angle lock">
+          <span class="step__t">T−15:00</span>
+          <div>
+            <h4>Dual-angle spatial lock</h4>
+            <p>The phone stream joins. Head-motion vectors from both cameras are correlated over a rolling window; the session cannot proceed below the correlation floor.</p>
+            <div class="step__tags"><span class="chip">Corr ≥ 0.94</span><span class="chip">Rolling 8 s</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−08:00" data-phase="Hardware attestation">
+          <span class="step__t">T−08:00</span>
+          <div>
+            <h4>Hardware attestation</h4>
+            <p>App Attest / Play Integrity receipts are verified against the vendor chain. Emulators, virtual cameras and rooted devices are refused before any exam data moves.</p>
+            <div class="step__tags"><span class="chip">Sealed chip</span><span class="chip">Chain verified</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−02:00" data-phase="Screen binding">
+          <span class="step__t">T−02:00</span>
+          <div>
+            <h4>Screen binding established</h4>
+            <p>The token loop starts and must hold three consecutive cycles inside the latency window before the delivery gate will even evaluate.</p>
+            <div class="step__tags"><span class="chip">3 s tokens</span><span class="chip">2000 ms window</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T−00:00" data-phase="Paper release">
+          <span class="step__t">T−00:00</span>
+          <div>
+            <h4>Paper release</h4>
+            <p>Only now does a paper exist for this candidate. It is generated, IRT-checked, encrypted to this session's key and streamed item by item.</p>
+            <div class="step__tags"><span class="chip chip--accent">Delivery gate</span><span class="chip">Per-candidate key</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T+00:00" data-phase="Continuous binding">
+          <span class="step__t">T+00:00</span>
+          <div>
+            <h4>Continuous binding</h4>
+            <p>Identity correlation, screen binding and attestation all remain live for the full duration. Interruptions pause the timer and are credited back, second for second.</p>
+            <div class="step__tags"><span class="chip">Timer pauses</span><span class="chip">Time credited</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T+180:00" data-phase="Sealed submission">
+          <span class="step__t">T+180:00</span>
+          <div>
+            <h4>Sealed submission</h4>
+            <p>Responses are hashed, countersigned by server and client, and written to an append-only ledger. The candidate receives the hash before they close the tab.</p>
+            <div class="step__tags"><span class="chip">SHA-256</span><span class="chip">Counter-signed</span></div>
+          </div>
+        </article>
+        <article class="step" data-clock="T+180:04" data-phase="Disposition">
+          <span class="step__t">T+180:04</span>
+          <div>
+            <h4>Evidence disposition</h4>
+            <p>Unflagged media is destroyed immediately. Flagged sessions enter the human queue with a 30-day clock, and the candidate is told, in their own report, exactly which is which.</p>
+            <div class="step__tags"><span class="chip">Purge or queue</span><span class="chip">P30D</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 06 · EDGE CASES ══════════════ -->
+<section class="section section--tight" id="edges">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">06 — Reality</span>
+        <span class="kicker kicker--plain muted">Edge-case protocol</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>The exam is at home. Home is not a controlled environment.</h2>
+        <p class="lead" style="margin-top:1.5rem" data-rise>Every one of these has a defined, candidate-favourable protocol. None of them ends a career by accident.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="edges" data-stagger="0.05">
+      <div class="edge">
+        <p class="edge__q"><b>E01</b> The internet drops mid-paper</p>
+        <p class="edge__a">Answers are already sealed locally. The timer halts within 400 ms, the client retries for 15 minutes, and on reconnect the lost seconds are <b>credited back in full</b>. The gap is an event on the record, never a verdict.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E02</b> The phone rings</p>
+        <p class="edge__a">The exam app holds the camera session through an incoming call and the timer pauses. A call answered is logged as a <b>stream interruption</b> and routed to human review — not scored, not failed.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E03</b> The phone battery dies</p>
+        <p class="edge__a">Charging is mandatory at Level 3 and warned at 30%. On loss, the candidate has 10 minutes to restore the secondary angle; beyond that the session becomes <b>Not assessable</b> with an automatic free re-sit.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E04</b> The mount slips or the phone falls</p>
+        <p class="edge__a">Geometry loss is detected within two frames. The candidate is prompted to re-seat the device, and the reposition window is timed out of the exam, not out of the candidate.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E05</b> Mains power fails</p>
+        <p class="edge__a">The client runs from battery and degrades to audio-plus-low-frame-rate video at 15% charge. Region-wide outages are detected across sessions and escalate to an <b>agency-level reschedule</b>.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E06</b> Someone walks into the room</p>
+        <p class="edge__a">A second face is recorded as an environmental event with the clip attached. A family member crossing the frame and a second person seated at the desk are different facts, and a human decides which happened.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E07</b> A candidate needs a comfort break</p>
+        <p class="edge__a">Scheduled and medical breaks are declared in advance and honoured. Re-entry requires a fresh liveness check; break time is excluded from the exam clock by policy.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E08</b> The candidate uses assistive technology</p>
+        <p class="edge__a">Screen readers, magnification and scribes are first-class configurations, declared at registration. The status agent allowlists them; extra time is applied to the generated paper's timing model.</p>
+      </div>
+      <div class="edge">
+        <p class="edge__q"><b>E09</b> The candidate has one device, not two</p>
+        <p class="edge__a">Level 3 requires two. Where a second device is unavailable, the agency assigns a <b>supervised civic node</b> — a library or panchayat centre with loan hardware — so the level is never a wealth test.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-top:2rem">
+    <p class="muted" style="font-size:var(--t-sm);max-width:76ch" data-rise>
+      Full protocols, owners and timing tables for all twenty-six defined edge cases are in the
+      <a class="link" href="prd.html#edge">Product Requirements Document →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 07 · PSYCHOMETRIC PARITY ══════════════ -->
+<section class="section section--sunk" id="parity">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">07 — Fairness</span>
+        <span class="kicker kicker--plain muted">Psychometric parity</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>Different papers are only fair if they are the <em class="ital">same test.</em></h2>
+        <p class="lead" style="margin-top:1.5rem" data-rise>
+          Item Response Theory turns that from a promise into a measurement. Every generated
+          variant carries the same three parameters as its parent — discrimination, difficulty
+          and guessing — inside a tolerance the calibrator enforces before release.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns:minmax(0,1fr);gap:1.25rem">
+      <div class="viz" data-rise>
+        <div class="viz__head">
+          <div>
+            <h3 class="viz__title">Item characteristic curves — one item, eight variants</h3>
+            <p class="viz__sub">3PL model: P(θ) = c + (1 − c) / (1 + e<sup>−1.7a(θ − b)</sup>). The shaded envelope is the ±0.05 logit parity band; a variant that leaves it is rejected before delivery.</p>
+          </div>
+          <span class="chip">PHY-1104</span>
+        </div>
+        <div class="chart" id="iccChart"></div>
+        <div class="legend">
+          <span class="legend__i"><i class="legend__key" style="background:var(--series-2);height:0;border-top:2px dotted var(--series-2)"></i>Base item, calibrated (dotted)</span>
+          <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>AI-generated variants, n = 8 (solid)</span>
+          <span class="legend__i"><i class="legend__key legend__key--band" style="background:var(--series-1);opacity:.18"></i>±0.05 logit parity envelope</span>
+        </div>
+        <details class="tableview">
+          <summary>View as table</summary>
+          <table id="iccTable"></table>
+        </details>
+      </div>
+
+      <div class="grid g-2" style="align-items:stretch">
+        <div class="viz" data-rise>
+          <div class="viz__head">
+            <div>
+              <h3 class="viz__title">Difficulty parity across a delivered cohort</h3>
+              <p class="viz__sub">Twelve variants of PHY-1104 as delivered on 30 July. Every b-parameter sits inside the tolerance band.</p>
+            </div>
+          </div>
+          <div class="chart" id="parityChart"></div>
+          <div class="legend">
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-2)"></i>Base item b = 0.380</span>
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1);border-radius:100px;width:10px;height:10px"></i>Delivered variant</span>
+            <span class="legend__i"><i class="legend__key legend__key--band" style="background:var(--series-1);opacity:.18"></i>Tolerance ±0.05</span>
+          </div>
+        </div>
+
+        <div class="viz" data-rise style="display:flex;flex-direction:column;gap:1.1rem">
+          <div class="viz__head"><h3 class="viz__title">What the calibrator holds constant</h3></div>
+          <ul style="display:flex;flex-direction:column;gap:.9rem">
+            <li style="display:grid;grid-template-columns:88px 1fr;gap:1rem;align-items:baseline;padding-bottom:.9rem;border-bottom:1px solid var(--line-soft)">
+              <span class="mono" style="color:var(--accent-deep)">a — SLOPE</span>
+              <span style="font-size:var(--t-sm)">Discrimination. How sharply the item separates candidates near its difficulty. Held to ±0.01.</span>
+            </li>
+            <li style="display:grid;grid-template-columns:88px 1fr;gap:1rem;align-items:baseline;padding-bottom:.9rem;border-bottom:1px solid var(--line-soft)">
+              <span class="mono" style="color:var(--accent-deep)">b — LOCATION</span>
+              <span style="font-size:var(--t-sm)">Difficulty on the ability scale. Held to ±0.05 logits — the visible band above.</span>
+            </li>
+            <li style="display:grid;grid-template-columns:88px 1fr;gap:1rem;align-items:baseline;padding-bottom:.9rem;border-bottom:1px solid var(--line-soft)">
+              <span class="mono" style="color:var(--accent-deep)">c — ASYMPTOTE</span>
+              <span style="font-size:var(--t-sm)">Guessing floor. Fixed by option count and distractor plausibility, so variants may not change how many options there are.</span>
+            </li>
+            <li style="display:grid;grid-template-columns:88px 1fr;gap:1rem;align-items:baseline">
+              <span class="mono" style="color:var(--accent-deep)">t̄ — TIME</span>
+              <span style="font-size:var(--t-sm)">Expected solve time from the response-time model. Held to ±4 seconds, so no variant is quietly longer to read.</span>
+            </li>
+          </ul>
+          <p class="muted" style="font-size:var(--t-xs);margin-top:auto">
+            Pre-calibration on a live cohort, continuous re-estimation during delivery, and a
+            post-hoc DIF sweep across language, region and gender.
+            <a class="link" href="psychometrics.html">Read the equivalence specification →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 08 · COMMAND CENTRE ══════════════ -->
+<section class="section" id="control">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">08 — Operations</span>
+        <span class="kicker kicker--plain muted">Agency control room</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>One national exam. One screen.</h2>
+        <p class="lead" style="margin-top:1.5rem" data-rise>Delivery health, queue depth and disposition — live. Every number here is a count of recorded events, never an estimate of anyone's honesty.</p>
+      </div>
+    </div>
+
+    <div class="cc" data-wipe>
+      <div class="cc__bar">
+        <span class="cc__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="cc__path">trustxd://control/neet-ug-2026/session-day-01</span>
+        <span class="cc__live">LIVE</span>
+      </div>
+
+      <div class="cc__body">
+        <div class="cc__cell sp-4">
+          <p class="tile__k">Candidates in session now</p>
+          <p class="tile__v tile__v--hero num" data-live-count>214,806</p>
+          <p class="tile__d">across 28 states · peak concurrency 231,412</p>
+        </div>
+
+        <div class="cc__cell sp-4">
+          <p class="tile__k">Sessions started per minute</p>
+          <p class="tile__v num">1,284</p>
+          <p class="tile__d">last 24 min · <b>+18%</b> vs. opening window</p>
+          <div class="spark" id="ccSpark"></div>
+        </div>
+
+        <div class="cc__cell sp-4">
+          <p class="tile__k">Delivery gate — median time to paper</p>
+          <p class="tile__v num">41.2 s</p>
+          <p class="tile__d">from Level 3 clear to first item rendered</p>
+          <div class="stack" role="img" aria-label="Time to paper: identity 24.1 s, attestation 6.4 s, binding 5.9 s, generation 4.8 s">
+            <i style="width:58%;background:var(--series-1)"></i>
+            <i style="width:16%;background:#5F76FF"></i>
+            <i style="width:14%;background:#93A3FF"></i>
+            <i style="width:12%;background:#C7CEFF"></i>
+          </div>
+          <div class="stack__legend">
+            <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>Identity 24.1 s</span>
+            <span class="legend__i"><i class="legend__key" style="background:#5F76FF"></i>Attest 6.4 s</span>
+            <span class="legend__i"><i class="legend__key" style="background:#93A3FF"></i>Bind 5.9 s</span>
+            <span class="legend__i"><i class="legend__key" style="background:#C7CEFF"></i>Gen 4.8 s</span>
+          </div>
+        </div>
+
+        <div class="cc__cell sp-5">
+          <p class="tile__k">Session disposition · today</p>
+          <div class="stack" style="height:30px" role="img" aria-label="Disposition: Clear 97.1 percent, Review required 2.6 percent, Not assessable 0.3 percent">
+            <i style="width:97.1%;background:var(--st-clear)"></i>
+            <i style="width:2.6%;background:var(--st-review)"></i>
+            <i style="width:0.3%;background:var(--st-null)"></i>
+          </div>
+          <div class="stack__legend">
+            <span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear 97.1%</span>
+            <span class="verdict verdict--review"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.6l5 8.8H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 5v2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Review 2.6%</span>
+            <span class="verdict verdict--null"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.6 6h4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Not assessable 0.3%</span>
+          </div>
+          <p class="muted" style="font-size:var(--t-xs);margin-top:.9rem">
+            Illustrative operating figures for a Level 3 delivery day, shown to demonstrate the
+            interface. Not results from a live administration.
+          </p>
+        </div>
+
+        <div class="cc__cell sp-7">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem">
+            <p class="tile__k">Event stream · human review queue</p>
+            <span class="mono dim">MEDIAN TIME TO REVIEWER 6 MIN</span>
+          </div>
+          <ul class="flagfeed" data-flagfeed aria-live="polite">
+            <li><span class="fid">S-77401</span><span class="fwhat">secondary_stream.interrupt 11.4 s</span><span class="verdict verdict--review"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.6l5 8.8H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 5v2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Review</span></li>
+            <li><span class="fid">S-77399</span><span class="fwhat">identity.level3 corr 0.983</span><span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear</span></li>
+            <li><span class="fid">S-77396</span><span class="fwhat">submission.sealed 9b21…77c0</span><span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 09 · DATA LIFECYCLE ══════════════ -->
+<section class="section section--tight" id="compliance">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">09 — Governance</span>
+        <span class="kicker kicker--plain muted">DPDP · GDPR</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>Capture the minimum. Keep it briefly. Prove you deleted it.</h2>
+      </div>
+    </div>
+
+    <div class="life" data-wipe>
+      <div class="life__i">
+        <span class="life__t">STAGE 01 · CAPTURE</span>
+        <h4>Purpose-bound</h4>
+        <p>Media is captured only for declared exam-integrity purposes, only for consented items, and only between session start and submission.</p>
+        <div class="life__bar"><i style="width:100%"></i></div>
+      </div>
+      <div class="life__i">
+        <span class="life__t">STAGE 02 · MINIMISE</span>
+        <h4>Discard on close</h4>
+        <p>Unflagged video and audio are destroyed the moment the session seals. What survives is the event record — timestamps and outcomes, not footage.</p>
+        <div class="life__bar"><i style="width:24%"></i></div>
+      </div>
+      <div class="life__i">
+        <span class="life__t">STAGE 03 · RETAIN</span>
+        <h4>30 days, encrypted</h4>
+        <p>Flagged clips only, encrypted at rest with per-session keys, accessible to assigned reviewers and to the candidate. Every access is logged to both.</p>
+        <div class="life__bar"><i style="width:52%"></i></div>
+      </div>
+      <div class="life__i">
+        <span class="life__t">STAGE 04 · PURGE</span>
+        <h4>Automatic and evidenced</h4>
+        <p>Deletion runs on schedule, emits its own signed record, and pauses only for an open appeal. The candidate is notified when their file is gone.</p>
+        <div class="life__bar"><i style="width:100%;background:var(--st-clear)"></i></div>
+      </div>
+    </div>
+
+    <div class="grid g-4" style="margin-top:1.25rem" data-stagger="0.06">
+      <div class="card card--flat"><span class="card__label">Residency</span><p style="margin-top:.6rem;font-size:var(--t-sm)">All candidate data processed and stored in-country, on infrastructure the agency can inspect.</p></div>
+      <div class="card card--flat"><span class="card__label">Rights</span><p style="margin-top:.6rem;font-size:var(--t-sm)">Access, correction, portability and grievance redressal wired into the candidate's own report view.</p></div>
+      <div class="card card--flat"><span class="card__label">Audit</span><p style="margin-top:.6rem;font-size:var(--t-sm)">Append-only ledger of every verdict, access and purge, exportable for statutory audit.</p></div>
+      <div class="card card--flat"><span class="card__label">Independence</span><p style="margin-top:.6rem;font-size:var(--t-sm)">Reviewer pool contracted separately from the delivery institution, with rotation and blind assignment.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 10 · REVIEWS ══════════════ -->
+<section class="section reviews" id="voices">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">10 — Voices</span>
+        <span class="kicker kicker--plain muted">From design partners</span>
+      </div>
+      <div>
+        <h2 class="t-d1" data-split>What the people who run exams told us.</h2>
+        <p style="margin-top:1.25rem"><span class="placeholder-note">
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.6l5 8.8H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 5v2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Placeholder copy — replace with attributed quotes before launch
+        </span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" style="--dur:64s" aria-hidden="false">
+    <div class="marquee__track" style="gap:1.1rem;padding-right:1.1rem">
+      <article class="rev">
+        <span class="rev__stars" aria-label="5 out of 5">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+        </span>
+        <p class="rev__q">"The part that changed the conversation internally was 'the paper does not exist yet'. Everything we spend on strongroom logistics is protecting an asset this design simply does not create."</p>
+        <div class="rev__who"><span class="rev__av">CE</span><span><span class="rev__name">Controller of Examinations</span><span class="rev__role">State technical university · design partner</span></span></div>
+      </article>
+
+      <article class="rev">
+        <span class="rev__stars" aria-label="5 out of 5">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+        </span>
+        <p class="rev__q">"We have refused every proctoring pilot on one ground: none of them could tell a tribunal why a candidate was flagged. A deterministic trail with three verdicts is something our legal cell can actually defend."</p>
+        <div class="rev__who"><span class="rev__av">LC</span><span><span class="rev__name">Head of Legal &amp; Compliance</span><span class="rev__role">Public-sector recruitment board</span></span></div>
+      </article>
+
+      <article class="rev">
+        <span class="rev__stars" aria-label="4 out of 5">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6 .8l1.4 3.5 3.9.3-3 2.5 1 3.7L6 8.5 2.7 10.8l1-3.7-3-2.5 3.9-.3z"/></svg>
+        </span>
+        <p class="rev__q">"My question was always psychometric, not technical. Show me that variant 47 is the same difficulty as variant 3 and I will sign. The parity band answered it in one chart."</p>
+        <div class="rev__who"><span class="rev__av">PS</span><span><span class="rev__name">Psychometrics lead</span><span class="rev__role">National assessment research group</span></span></div>
+      </article>
+
+      <article class="rev">
+        <span class="rev__stars" aria-label="5 out of 5">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+        </span>
+        <p class="rev__q">"Students in my district travel eleven hours to a centre. If the integrity story holds, the equity story is bigger than the integrity story."</p>
+        <div class="rev__who"><span class="rev__av">DE</span><span><span class="rev__name">District education officer</span><span class="rev__role">Aspirational district programme</span></span></div>
+      </article>
+
+      <article class="rev">
+        <span class="rev__stars" aria-label="5 out of 5">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 0l1.6 3.9 4.4.3-3.4 2.8 1.1 4.2L6 8.9 2.3 11.2l1.1-4.2L0 4.2l4.4-.3z"/></svg>
+        </span>
+        <p class="rev__q">"The self-view mattered more than we expected in user testing. Candidates stopped asking what was being recorded once they could simply see it, at full size, the whole time."</p>
+        <div class="rev__who"><span class="rev__av">UX</span><span><span class="rev__name">Accessibility researcher</span><span class="rev__role">Candidate experience study, n = 240</span></span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 11 · DELIVERABLES ══════════════ -->
+<section class="section section--sunk" id="docs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__side">
+        <span class="sec-head__num">11 — Documentation</span>
+        <span class="kicker kicker--plain muted">Evaluation pack</span>
+      </div>
+      <h2 class="t-d1" data-split>Everything a procurement committee will ask for, already written.</h2>
+    </div>
+
+    <div class="docs" data-stagger="0.07">
+      <a class="doccard" href="prd.html" data-cursor="Open">
+        <span class="card__label">01 · PRD</span>
+        <h3>Product requirements</h3>
+        <p>User stories for candidate, invigilator, reviewer and agency; functional requirements; twenty-six edge-case protocols.</p>
+        <span class="doccard__go">Read <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="doccard" href="architecture.html" data-cursor="Open">
+        <span class="card__label">02 · Blueprint</span>
+        <h3>System architecture</h3>
+        <p>End-to-end data flow: WebRTC engine, attestation verification, generation pipeline, IRT service, evidence ledger.</p>
+        <span class="doccard__go">Read <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="doccard" href="psychometrics.html" data-cursor="Open">
+        <span class="card__label">03 · Specification</span>
+        <h3>Psychometric equivalence</h3>
+        <p>How IRT keeps AI-generated variants mathematically fair: calibration, tolerance, linking, DIF and the rejection rule.</p>
+        <span class="doccard__go">Read <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="doccard" href="pitch.html" data-cursor="Present">
+        <span class="card__label">04 · Deck</span>
+        <h3>Strategic pitch</h3>
+        <p>Ten slides for testing agencies, education ministries and university boards. Keyboard-navigable, presentation-ready.</p>
+        <span class="doccard__go">Present <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CTA ══════════════ -->
+<section class="section section--tight" id="pilot">
+  <div class="wrap">
+    <div class="cta">
+      <div class="cta__grid">
+        <div>
+          <span class="kicker kicker--plain" style="color:rgba(244,243,239,.5)">Pilot programme · 2026</span>
+          <h2 class="t-d1" style="margin-top:1.25rem" data-split>Run one paper on it. Then decide.</h2>
+          <p>A pilot is a single exam, one cohort, both systems side by side — your existing delivery and TrustXD ExamOS — with the evidence ledger open to your auditors from day one.</p>
+        </div>
+        <form class="cta__form" data-demo-form>
+          <label class="field">
+            <span class="mono" style="color:rgba(244,243,239,.5)">ORG</span>
+            <input type="text" name="org" placeholder="Testing agency, board or university" required>
+          </label>
+          <label class="field">
+            <span class="mono" style="color:rgba(244,243,239,.5)">MAIL</span>
+            <input type="email" name="email" placeholder="official@domain.gov.in" required>
+          </label>
+          <button class="btn btn--accent" type="submit" style="justify-content:center" data-magnet="0.18">Request the pilot brief
+            <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6.5 2.5L10 6l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <p class="cta__note" data-form-note>We reply within two working days. No candidate data is ever requested for an evaluation.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div class="foot__col">
+        <a class="brand" href="index.html" style="color:var(--paper)" aria-label="TrustXD ExamOS home">
+          <svg class="brand__mark" viewBox="0 0 26 26" aria-hidden="true">
+            <rect x="1" y="1" width="24" height="24" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 8l10 10M18 8L8 18" stroke="#5F76FF" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="13" cy="13" r="3.2" fill="#0B0C0E" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="brand__name"><b>TrustXD</b> <span style="color:rgba(244,243,239,.55)">ExamOS</span></span>
+        </a>
+        <p style="color:rgba(244,243,239,.5);font-size:var(--t-sm);max-width:34ch;margin-top:1.25rem">
+          Zero-leakage assessment infrastructure for national competitive examinations and
+          university entrance tests.
+        </p>
+      </div>
+      <div class="foot__col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#modules">Modules A–E</a></li>
+          <li><a href="#levels">Assurance levels</a></li>
+          <li><a href="#runtime">Session runtime</a></li>
+          <li><a href="#control">Control room</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Documents</h4>
+        <ul>
+          <li><a href="prd.html">Product requirements</a></li>
+          <li><a href="architecture.html">System architecture</a></li>
+          <li><a href="psychometrics.html">Psychometric spec</a></li>
+          <li><a href="pitch.html">Pitch deck</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Governance</h4>
+        <ul>
+          <li><a href="#compliance">Data lifecycle</a></li>
+          <li><a href="#edges">Edge-case protocol</a></li>
+          <li><a href="#parity">Psychometric parity</a></li>
+          <li><a href="#pilot">Request a pilot</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="foot__wordmark" aria-hidden="true">TRUSTXD</p>
+
+    <div class="foot__bottom">
+      <span>© <span data-year></span> TrustXD ExamOS. Concept site — figures shown are illustrative.</span>
+      <span>Built for DPDP Act 2023 · GDPR · WCAG 2.2 AA</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js" defer></script>
+<script src="assets/js/hero.js" defer></script>
+<script src="assets/js/demos.js" defer></script>
+</body>
+</html>

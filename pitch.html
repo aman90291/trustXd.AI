@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategic Pitch — TrustXD ExamOS</title>
+<meta name="description" content="Ten-slide strategic pitch for national testing agencies, education ministries and university boards: TrustXD ExamOS, the end-to-paper-leaks assessment platform.">
+<meta name="theme-color" content="#F4F3EF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='8' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%232540FF' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/core.css">
+<link rel="stylesheet" href="assets/css/pitch.css">
+<style>
+  .chart svg { width: 100%; height: auto; overflow: visible; }
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .9rem; }
+  .legend__i { display: inline-flex; align-items: center; gap: .5em; font-size: var(--t-xs); color: var(--ink-2); }
+  .legend__key { width: 14px; height: 3px; border-radius: 2px; flex: none; }
+  .legend__key--band { height: 10px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="deck__top">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:.5rem;color:inherit">
+    <span class="deck__num">TRUSTXD EXAMOS</span>
+  </a>
+  <span class="deck__hint">
+    <kbd>←</kbd><kbd>→</kbd> navigate &nbsp;·&nbsp; <kbd>F</kbd> fullscreen &nbsp;·&nbsp;
+    <span class="deck__num" data-deck-num>01 / 10</span>
+  </span>
+</div>
+
+<nav class="deck__rail" aria-label="Slides"></nav>
+<div class="deck__bar" aria-hidden="true"><i></i></div>
+
+<div class="deck">
+
+  <!-- ─────────── 01 · TITLE ─────────── -->
+  <section class="slide slide--ink" id="s1" aria-label="Slide 1: Title">
+    <div class="slide__inner">
+      <div class="slide__eyebrow">
+        <span class="kicker">Strategic brief · 2026</span>
+        <span class="chip" style="background:rgba(244,243,239,.08);color:rgba(244,243,239,.75);box-shadow:inset 0 0 0 1px rgba(244,243,239,.18)">Confidential — for evaluation</span>
+      </div>
+      <h2 style="max-width:16ch">The end of paper leaks.</h2>
+      <p class="big" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+        TrustXD ExamOS is zero-leakage assessment infrastructure — hardware-attested identity
+        paired with just-in-time exam generation, so a national examination can be sat from
+        home with cryptographic integrity.
+      </p>
+      <div class="s-stats">
+        <div class="s-stat"><b>0</b><span>papers in existence before a candidate authenticates</span></div>
+        <div class="s-stat"><b>2</b><span>synchronised camera angles, temporally cross-matched</span></div>
+        <div class="s-stat"><b>3</b><span>permitted verdicts — and no integrity score, ever</span></div>
+      </div>
+      <p class="s-note">Prepared for national testing agencies, ministries of education and university examination boards.</p>
+    </div>
+  </section>
+
+  <!-- ─────────── 02 · PROBLEM ─────────── -->
+  <section class="slide" id="s2" aria-label="Slide 2: The problem">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">01 — The problem</span></div>
+      <h2>Exams do not fail at the margins. They fail at the design.</h2>
+      <div class="s-cols">
+        <article class="s-card">
+          <span class="s-card__n">FAILURE 01</span>
+          <h4>The paper exists before the exam</h4>
+          <p>A printed paper is a valuable secret held by presses, couriers, strongrooms and centre staff for weeks. Leakage is what that design produces when it works as built.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">FAILURE 02</span>
+          <h4>Identity is a moment, not a state</h4>
+          <p>A photograph and a signature at a desk at 9 a.m. Proxy substitution survives because nobody is checking who is sitting there at 10:40.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">FAILURE 03</span>
+          <h4>Integrity is reported as a score</h4>
+          <p>Remote proctoring returns "87% suspicious" and a career turns on it. A candidate cannot cross-examine a number; a court cannot audit one.</p>
+        </article>
+      </div>
+      <p class="big" style="margin-top:clamp(1.5rem,3vw,2.5rem);max-width:74ch">
+        Each failure ends the same way: cancellation, re-examination, litigation, a lost year for
+        candidates who did nothing wrong — and a lasting reduction in public trust that no
+        subsequent administration fully recovers.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────── 03 · WHY NOW ─────────── -->
+  <section class="slide slide--sunk" id="s3" aria-label="Slide 3: Why now">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">02 — Why now</span></div>
+      <div class="s-split">
+        <div>
+          <h2>Four conditions arrived at once.</h2>
+          <p class="big" style="margin-top:1.5rem">
+            None of these existed together five years ago. Every previous attempt at at-home
+            high-stakes assessment failed on at least one of them.
+          </p>
+        </div>
+        <ul class="s-list">
+          <li><b>01</b><span>Sealed-chip attestation is universal<small>App Attest and Play Integrity ship in every current phone — a cryptographic proof that a frame came from real hardware.</small></span></li>
+          <li><b>02</b><span>A second camera is already in the room<small>The dual-angle rig needs no new hardware for the overwhelming majority of candidates.</small></span></li>
+          <li><b>03</b><span>Generative models can rewrite inside bounds<small>Reliable enough to re-parameterise items within declared ranges — and now cheap enough to do it per candidate, at national scale.</small></span></li>
+          <li><b>04</b><span>The legal frame is settled<small>The DPDP Act 2023 tells us exactly what consent, retention and redress must look like. Compliance is now a spec, not a guess.</small></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── 04 · INSIGHT ─────────── -->
+  <section class="slide slide--ink" id="s4" aria-label="Slide 4: The insight">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">03 — The insight</span></div>
+      <h2 style="max-width:22ch">You cannot leak a paper that does not exist yet.</h2>
+      <p class="big" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+        Every incumbent guards the secret harder — more strongrooms, more cameras, more
+        biometric gates at the centre door. We removed the secret.
+      </p>
+      <ul class="s-list" style="margin-top:clamp(1.75rem,4vw,3rem)">
+        <li><b>A</b><span>Don't guard the paper — don't create it<small>Papers are assembled per candidate at T−0, after identity clears, and never exist in advance.</small></span></li>
+        <li><b>B</b><span>Don't check identity once — hold it<small>Two cameras at an arbitrary angle, correlated continuously, with a sealed chip proving the hardware is real.</small></span></li>
+        <li><b>C</b><span>Don't score integrity — record it<small>Deterministic evidence, three verdicts, an independent human on every flag, and the candidate reads the same file.</small></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── 05 · PRODUCT ─────────── -->
+  <section class="slide" id="s5" aria-label="Slide 5: The product">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">04 — The product</span><span class="chip">Five modules · three assurance levels</span></div>
+      <h2>Three locks in series. The paper opens last.</h2>
+      <div class="s-cols s-cols--4" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+        <article class="s-card">
+          <span class="s-card__n">MODULE A</span>
+          <h4>Identity lock</h4>
+          <p>On-device ID parsing, active liveness, a 468-point facial mesh, and a second camera at 60°–120° whose motion must correlate with the first. Every frame signed by a sealed chip.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">MODULE B</span>
+          <h4>Display lock</h4>
+          <p>A 3-second token painted on the exam screen, read by the phone, returned over an independent channel and validated inside a 2-second window on the server's own clock.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">MODULE C</span>
+          <h4>Paper lock</h4>
+          <p>The item bank stays encrypted until locks A and B both hold. Then the generator writes this candidate's paper — and the IRT calibrator proves it is the same test.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">MODULES D + E</span>
+          <h4>Evidence &amp; rights</h4>
+          <p>Deterministic trails, three verdicts, independent reviewers, itemised bilingual consent, continuous self-view, and a 30-day purge that proves itself.</p>
+        </article>
+      </div>
+      <p class="s-note">Level 1 browser-only · Level 2 dual-camera · Level 3 dual-camera plus attested status agent for national examinations.</p>
+    </div>
+  </section>
+
+  <!-- ─────────── 06 · FAIRNESS ─────────── -->
+  <section class="slide slide--sunk" id="s6" aria-label="Slide 6: Psychometric fairness">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">05 — The hard question</span></div>
+      <div class="s-split" style="align-items:start">
+        <div>
+          <h2 style="max-width:16ch">"Different papers can't be fair."</h2>
+          <p class="big" style="margin-top:1.5rem">
+            They can — if you can measure it. Item Response Theory turns fairness from a promise
+            into an enforced tolerance, checked before any candidate sees an item.
+          </p>
+          <ul class="s-list" style="margin-top:1.75rem">
+            <li><b>±0.05</b><span>logit tolerance on difficulty<small>Enforced per item. A variant outside the band is rejected, never delivered.</small></span></li>
+            <li><b>0.094</b><span>marks — typical form effect on a 60-item paper<small>Against a standard error of measurement of 3.16 marks.</small></span></li>
+            <li><b>3%</b><span>of the noise a candidate already carries<small>The paper they were given is the smallest source of uncertainty in their score.</small></span></li>
+          </ul>
+        </div>
+        <div>
+          <div style="background:var(--surface);border-radius:var(--r-lg);box-shadow:inset 0 0 0 1px var(--line);padding:clamp(1rem,2vw,1.5rem)">
+            <div class="chart" id="pIcc"></div>
+            <div class="legend">
+              <span class="legend__i"><i class="legend__key" style="border-top:2px dotted var(--series-2);background:none;height:0"></i>Base item (dotted)</span>
+              <span class="legend__i"><i class="legend__key" style="background:var(--series-1)"></i>Generated variants, n = 8</span>
+              <span class="legend__i"><i class="legend__key legend__key--band" style="background:var(--series-1);opacity:.18"></i>±0.05 parity envelope</span>
+            </div>
+          </div>
+          <p class="s-note">Item characteristic curves. Full derivation in the psychometric equivalence specification.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── 07 · DEFENSIBILITY ─────────── -->
+  <section class="slide" id="s7" aria-label="Slide 7: Legal defensibility">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">06 — Defensibility</span></div>
+      <h2>The system your legal cell can actually defend.</h2>
+      <div class="s-cols" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+        <article class="s-card">
+          <span class="s-card__n">NO BLACK BOX</span>
+          <h4>There is no integrity score</h4>
+          <p>No field stores one, no API returns one, no configuration enables one. Every flag names the rule and the threshold that produced it.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">THREE OUTCOMES</span>
+          <h4>Clear · Review required · Not assessable</h4>
+          <p>Nothing else. "Not assessable" says the evidence was insufficient — it says nothing about the candidate, and always carries a free re-sit.</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">REPRODUCIBLE</span>
+          <h4>The same trail, seven years later</h4>
+          <p>Append-only, signed, deterministic. A tribunal replays the session and gets byte-identical evidence — with the rule-set version it was judged under.</p>
+        </article>
+      </div>
+      <div class="s-split" style="margin-top:clamp(1.75rem,4vw,3rem);align-items:start">
+        <p class="big">
+          Candidates see their own evidence, their own reviewer access log, and their own
+          retention clock. A system nobody can inspect is not a trust system, whatever it
+          detects.
+        </p>
+        <p class="big">
+          Findings of misconduct remain the institution's own decision. TrustXD supplies the
+          evidence file and holds no opinion on guilt — which is precisely why the evidence
+          file is worth something.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── 08 · MARKET ─────────── -->
+  <section class="slide slide--sunk" id="s8" aria-label="Slide 8: Market and model">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">07 — Market &amp; model</span></div>
+      <div class="s-split" style="align-items:start">
+        <div>
+          <h2 style="max-width:14ch">Priced per session, sold per programme.</h2>
+          <ul class="s-list" style="margin-top:1.5rem">
+            <li><b>01</b><span>National testing agencies<small>Multi-shift competitive examinations — the anchor customer and the hardest proof point.</small></span></li>
+            <li><b>02</b><span>State boards and common entrance tests<small>High volume, high political sensitivity, strong equity mandate.</small></span></li>
+            <li><b>03</b><span>Universities and deemed universities<small>Institution-run entrance tests where centre logistics dominate cost.</small></span></li>
+            <li><b>04</b><span>Banking and public-sector recruitment<small>Frequent cycles, large cohorts, existing remote-assessment budgets.</small></span></li>
+          </ul>
+          <p class="s-note">Revenue: per-candidate-session licence priced by assurance level, plus an annual platform subscription, plus a funded civic-node programme for candidates without a second device.</p>
+        </div>
+        <div>
+          <h3>Where the cost actually goes</h3>
+          <p style="font-size:var(--t-sm);color:var(--ink-3);margin-top:.5rem;max-width:44ch">
+            Indexed comparison of delivered cost per candidate. Centre-based delivery is set to 100.
+          </p>
+          <div class="bars" role="img" aria-label="Indexed cost per candidate: centre-based delivery 100, TrustXD Level 3 with civic-node programme 52, TrustXD Level 3 standard 38.">
+            <div class="bar__row">
+              <span class="bar__k">Centre-based delivery</span>
+              <span class="bar__track"><i class="bar__fill bar__fill--ghost" style="width:100%"></i><span class="bar__v">100</span></span>
+            </div>
+            <div class="bar__row">
+              <span class="bar__k">TrustXD L3 + civic nodes</span>
+              <span class="bar__track"><i class="bar__fill" style="width:52%"></i><span class="bar__v">52</span></span>
+            </div>
+            <div class="bar__row">
+              <span class="bar__k">TrustXD L3 standard</span>
+              <span class="bar__track"><i class="bar__fill" style="width:38%"></i><span class="bar__v">38</span></span>
+            </div>
+          </div>
+          <p class="s-note">
+            Illustrative model, not a quoted price. It removes venue hire, printing, secure
+            transport, invigilator deployment and candidate travel; it adds compute, media
+            egress, reviewer capacity and the civic-node programme. Actual figures are modelled
+            per programme during a pilot.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── 09 · ROADMAP ─────────── -->
+  <section class="slide" id="s9" aria-label="Slide 9: Roadmap">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">08 — Path to national scale</span></div>
+      <h2>Earn the national exam. Do not start with it.</h2>
+      <div class="s-cols s-cols--4" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+        <article class="s-card">
+          <span class="s-card__n">P0 · SHADOW</span>
+          <h4>One university test</h4>
+          <p>~5,000 candidates, run alongside the existing centre-based exam. Results not issued from TrustXD.</p>
+          <p style="margin-top:auto;color:var(--accent-deep);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.1em">EXIT: ZERO DELIVERY INCIDENTS</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">P1 · PARALLEL</span>
+          <h4>Results issued</h4>
+          <p>Two university tests plus a banking recruitment shift, ~120,000 candidates, live results.</p>
+          <p style="margin-top:auto;color:var(--accent-deep);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.1em">EXIT: FLAG RATE ≤ 4%</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">P2 · REGIONAL</span>
+          <h4>State entrance test</h4>
+          <p>~600,000 candidates with civic nodes in aspirational districts, proving the equity model.</p>
+          <p style="margin-top:auto;color:var(--accent-deep);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.1em">EXIT: NO DISTRICT SKEW</p>
+        </article>
+        <article class="s-card">
+          <span class="s-card__n">P3 · NATIONAL</span>
+          <h4>Full-scale administration</h4>
+          <p>A national competitive examination at 2.5 million concurrent sessions.</p>
+          <p style="margin-top:auto;color:var(--accent-deep);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.1em">EXIT: CLEAN STATUTORY AUDIT</p>
+        </article>
+      </div>
+      <p class="big" style="margin-top:clamp(1.5rem,3vw,2.5rem);max-width:74ch">
+        Each phase publishes its own evidence: appeal-upholding rates, Not-assessable rates by
+        district, and an independent DIF review. If the equity numbers do not hold, the phase
+        does not advance.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────── 10 · THE ASK ─────────── -->
+  <section class="slide slide--ink" id="s10" aria-label="Slide 10: The ask">
+    <div class="slide__inner">
+      <div class="slide__eyebrow"><span class="kicker">09 — The ask</span></div>
+      <h2 style="max-width:14ch">Run one paper on it. Then decide.</h2>
+      <div class="s-split" style="margin-top:clamp(1.5rem,3vw,2.5rem);align-items:start">
+        <ul class="s-list">
+          <li><b>WE ASK</b><span>One examination, one cohort<small>Run in shadow beside your existing delivery, with your own psychometricians reading our parameters.</small></span></li>
+          <li><b>WE ASK</b><span>A named audit contact<small>Ledger access from day one, not after the pilot report is written.</small></span></li>
+          <li><b>WE ASK</b><span>Twelve weeks<small>Four to integrate, two to seed the item families, six to deliver and analyse.</small></span></li>
+        </ul>
+        <ul class="s-list">
+          <li><b>YOU GET</b><span>The complete evidence ledger<small>Yours, exportable, in a documented open format. No lock-in and no data hostage.</small></span></li>
+          <li><b>YOU GET</b><span>Published fairness analysis<small>Full DIF sweep and form-equivalence report, whatever it says.</small></span></li>
+          <li><b>YOU GET</b><span>A costed national model<small>Delivered cost per candidate for your programme, built from your pilot's real numbers.</small></span></li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-top:clamp(1.75rem,4vw,3rem)">
+        <a class="btn btn--accent" href="index.html#pilot" data-magnet="0.2">Request the pilot brief</a>
+        <a class="btn btn--ghost" href="prd.html" style="--fg:var(--paper);box-shadow:inset 0 0 0 1px rgba(244,243,239,.28)">Read the PRD</a>
+        <a class="btn btn--ghost" href="architecture.html" style="--fg:var(--paper);box-shadow:inset 0 0 0 1px rgba(244,243,239,.28)">Architecture blueprint</a>
+      </div>
+      <p class="s-note">TrustXD ExamOS · <span data-year></span> · Concept deck. Figures marked illustrative are modelling assumptions, not results.</p>
+    </div>
+  </section>
+
+</div>
+
+<script src="assets/js/pitch.js" defer></script>
+<script src="assets/js/psychometrics.js" defer></script>
+</body>
+</html>

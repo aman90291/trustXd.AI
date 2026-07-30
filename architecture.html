@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Architecture — TrustXD ExamOS</title>
+<meta name="description" content="End-to-end architecture blueprint for TrustXD ExamOS: WebRTC streaming, sealed-chip attestation, JIT generation pipeline, IRT calibration and the deterministic evidence ledger.">
+<meta name="theme-color" content="#F4F3EF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='8' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%232540FF' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/core.css">
+<link rel="stylesheet" href="assets/css/doc.css">
+<style>
+  .dg text { font-family: var(--mono); font-size: 9.5px; letter-spacing: .04em; fill: var(--ink-2); }
+  .dg .lbl { font-family: var(--sans); font-size: 11.5px; letter-spacing: -.01em; fill: var(--ink); }
+  .dg .sub { font-size: 8.5px; fill: var(--ink-4); }
+  .dg .box { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }
+  .dg .box--acc { fill: var(--accent-wash); stroke: var(--accent-line); }
+  .dg .box--ink { fill: var(--ink); stroke: var(--ink); }
+  .dg .box--ink + .lbl, .dg .on-ink { fill: #fff; }
+  .dg .zone { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 4; rx: 12; }
+  .dg .zlabel { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; fill: var(--ink-4); }
+  .dg .flow { stroke: var(--ink-4); stroke-width: 1.2; fill: none; }
+  .dg .flow--acc { stroke: var(--accent); stroke-width: 1.6; }
+  .dg .flow--dash { stroke-dasharray: 4 4; }
+  .dg .flow--crit { stroke: var(--st-crit); }
+  .dg .lane { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html" aria-label="TrustXD ExamOS home">
+      <svg class="brand__mark" viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 8l10 10M18 8L8 18" stroke="#2540FF" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="13" cy="13" r="3.2" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span class="brand__name"><b>TrustXD</b> <span>ExamOS</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="index.html#modules">Platform</a>
+      <a class="nav__link" href="prd.html">PRD</a>
+      <a class="nav__link" href="architecture.html" aria-current="page">Architecture</a>
+      <a class="nav__link" href="psychometrics.html">Psychometrics</a>
+      <a class="nav__link" href="pitch.html">Deck</a>
+    </nav>
+    <div class="nav__cta">
+      <a class="btn btn--sm" href="index.html#pilot" data-magnet="0.2">Request a pilot</a>
+      <button class="nav__burger" aria-label="Open menu" aria-expanded="false"><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" role="dialog" aria-label="Menu" aria-modal="true">
+  <ul class="menu__list">
+    <li class="menu__item"><a href="index.html">Home</a></li>
+    <li class="menu__item"><a href="prd.html">Product requirements</a></li>
+    <li class="menu__item"><a href="architecture.html">Architecture</a></li>
+    <li class="menu__item"><a href="psychometrics.html">Psychometrics</a></li>
+    <li class="menu__item"><a href="pitch.html">Pitch deck</a></li>
+  </ul>
+  <div class="menu__foot">
+    <p class="mono muted">TRUSTXD EXAMOS · <span data-year></span></p>
+    <a class="btn btn--accent btn--sm" href="index.html#pilot">Request a pilot</a>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="dochero">
+  <div class="wrap">
+    <div class="dochero__meta">
+      <span class="kicker">Deliverable 02</span>
+      <span class="chip">Blueprint · v1.0</span>
+      <span class="mono dim">TARGET: 2.5 M CONCURRENT L3 SESSIONS</span>
+    </div>
+    <h1 data-split>End-to-end system architecture</h1>
+    <p class="lead" data-rise>
+      Five subsystems, one invariant: no candidate-addressable question text exists anywhere in
+      the system until that candidate's identity, hardware and display have all been proven.
+    </p>
+
+    <div class="dochero__facts" data-stagger="0.06">
+      <div class="dochero__fact"><b>Transport</b><span>WebRTC SFU for media · independent WSS for binding</span></div>
+      <div class="dochero__fact"><b>Trust anchor</b><span>App Attest / Play Integrity receipt chain</span></div>
+      <div class="dochero__fact"><b>Generation</b><span>Template-bounded LLM + solver gate + IRT calibrator</span></div>
+      <div class="dochero__fact"><b>Record</b><span>Append-only signed ledger, 7-year replay</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="doc">
+    <aside class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a class="toc__link is-active" href="#topology">1 · System topology</a></li>
+        <li><a class="toc__link" href="#media">2 · WebRTC streaming engine</a></li>
+        <li><a class="toc__link" href="#attest">3 · Attestation verification</a></li>
+        <li><a class="toc__link" href="#binding">4 · Screen-binding timing</a></li>
+        <li><a class="toc__link" href="#gate">5 · Delivery gate</a></li>
+        <li><a class="toc__link" href="#generation">6 · Generation &amp; IRT pipeline</a></li>
+        <li><a class="toc__link" href="#evidence">7 · Evidence ledger</a></li>
+        <li><a class="toc__link" href="#threat">8 · Threat model</a></li>
+        <li><a class="toc__link" href="#scale">9 · Scale &amp; failure domains</a></li>
+      </ol>
+    </aside>
+
+    <article class="prose">
+
+      <section id="topology" data-doc-sec>
+        <h2><span class="sn">Section 01</span>System topology</h2>
+        <p>
+          Four planes. The candidate plane holds no secrets; the edge plane terminates media and
+          attestation but never sees item content; the service plane holds the invariants; the
+          data plane is append-only where it matters and short-lived where it does not.
+        </p>
+
+        <figure class="figure">
+          <div class="figure__frame">
+            <svg class="dg" viewBox="0 0 900 470" role="img" aria-label="System topology showing candidate plane, edge plane, service plane and data plane, with media flowing from the candidate devices through the edge to the service plane, and item content flowing only from the sealed bank through the delivery gate to the exam client.">
+              <!-- zones -->
+              <rect class="zone" x="12" y="42" width="186" height="360"/>
+              <text class="zlabel" x="20" y="34">CANDIDATE PLANE</text>
+              <rect class="zone" x="222" y="42" width="186" height="360"/>
+              <text class="zlabel" x="230" y="34">EDGE PLANE · IN-COUNTRY</text>
+              <rect class="zone" x="432" y="42" width="222" height="360"/>
+              <text class="zlabel" x="440" y="34">SERVICE PLANE</text>
+              <rect class="zone" x="678" y="42" width="208" height="360"/>
+              <text class="zlabel" x="686" y="34">DATA PLANE</text>
+
+              <!-- candidate -->
+              <rect class="box" x="30" y="66" width="150" height="52" rx="10"/>
+              <text class="lbl" x="44" y="88">Exam client</text>
+              <text class="sub" x="44" y="103">browser · nothing cached</text>
+
+              <rect class="box" x="30" y="152" width="150" height="52" rx="10"/>
+              <text class="lbl" x="44" y="174">Companion app</text>
+              <text class="sub" x="44" y="189">sealed chip signs frames</text>
+
+              <rect class="box" x="30" y="238" width="150" height="52" rx="10"/>
+              <text class="lbl" x="44" y="260">Status agent</text>
+              <text class="sub" x="44" y="275">state, never content</text>
+
+              <rect class="box" x="30" y="324" width="150" height="52" rx="10"/>
+              <text class="lbl" x="44" y="346">Self-view</text>
+              <text class="sub" x="44" y="361">all capture stays visible</text>
+
+              <!-- edge -->
+              <rect class="box" x="240" y="66" width="150" height="52" rx="10"/>
+              <text class="lbl" x="254" y="88">WebRTC SFU</text>
+              <text class="sub" x="254" y="103">+ TURN relay</text>
+
+              <rect class="box box--acc" x="240" y="152" width="150" height="52" rx="10"/>
+              <text class="lbl" x="254" y="174">Token gateway</text>
+              <text class="sub" x="254" y="189">WSS · independent path</text>
+
+              <rect class="box" x="240" y="238" width="150" height="52" rx="10"/>
+              <text class="lbl" x="254" y="260">Attestation verifier</text>
+              <text class="sub" x="254" y="275">vendor chain check</text>
+
+              <rect class="box" x="240" y="324" width="150" height="52" rx="10"/>
+              <text class="lbl" x="254" y="346">Media processor</text>
+              <text class="sub" x="254" y="361">mesh, corr, clip cut</text>
+
+              <!-- services -->
+              <rect class="box box--ink" x="450" y="66" width="186" height="46" rx="10"/>
+              <text class="lbl on-ink" x="464" y="88">Session orchestrator</text>
+              <text class="sub" x="464" y="102" fill="rgba(255,255,255,.55)">authoritative session clock</text>
+
+              <rect class="box" x="450" y="132" width="186" height="46" rx="10"/>
+              <text class="lbl" x="464" y="154">Identity service</text>
+              <text class="sub" x="464" y="168">OCR · liveness · correlation</text>
+
+              <rect class="box box--acc" x="450" y="198" width="186" height="46" rx="10"/>
+              <text class="lbl" x="464" y="220">Delivery gate</text>
+              <text class="sub" x="464" y="234">A ∧ B ∧ attest → key</text>
+
+              <rect class="box" x="450" y="264" width="186" height="46" rx="10"/>
+              <text class="lbl" x="464" y="286">Generation + IRT</text>
+              <text class="sub" x="464" y="300">variant engine · solver · IRT</text>
+
+              <rect class="box" x="450" y="330" width="186" height="46" rx="10"/>
+              <text class="lbl" x="464" y="352">Evidence engine</text>
+              <text class="sub" x="464" y="366">deterministic · append-only</text>
+
+              <!-- data -->
+              <rect class="box" x="696" y="66" width="172" height="46" rx="10"/>
+              <text class="lbl" x="710" y="88">Sealed item bank</text>
+              <text class="sub" x="710" y="102">AES-256-GCM at rest</text>
+
+              <rect class="box" x="696" y="152" width="172" height="46" rx="10"/>
+              <text class="lbl" x="710" y="174">Evidence ledger</text>
+              <text class="sub" x="710" y="188">signed · 7 years</text>
+
+              <rect class="box" x="696" y="238" width="172" height="46" rx="10"/>
+              <text class="lbl" x="710" y="260">Media vault</text>
+              <text class="sub" x="710" y="274">flagged clips only · P30D</text>
+
+              <rect class="box" x="696" y="324" width="172" height="46" rx="10"/>
+              <text class="lbl" x="710" y="346">Consent registry</text>
+              <text class="sub" x="710" y="360">Ed25519 receipts</text>
+
+              <!-- arrows -->
+              <defs>
+                <marker id="ah" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+                  <path d="M0 0l6 3-6 3z" fill="var(--ink-4)"/>
+                </marker>
+                <marker id="aha" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+                  <path d="M0 0l6 3-6 3z" fill="var(--accent)"/>
+                </marker>
+              </defs>
+
+              <path class="flow" d="M180 92h52" marker-end="url(#ah)"/>
+              <path class="flow" d="M180 178h52" marker-end="url(#ah)"/>
+              <path class="flow flow--dash" d="M180 264h52" marker-end="url(#ah)"/>
+              <path class="flow flow--dash" d="M180 350h52" marker-end="url(#ah)"/>
+
+              <path class="flow" d="M390 92h28v46h26" marker-end="url(#ah)"/>
+              <path class="flow flow--acc" d="M390 178h24v42h30" marker-end="url(#aha)"/>
+              <path class="flow" d="M390 264h22v-42h32" marker-end="url(#ah)"/>
+              <path class="flow" d="M390 350h54" marker-end="url(#ah)"/>
+
+              <!-- service ↔ data -->
+              <path class="flow flow--acc" d="M690 92h-24v122h-24" marker-end="url(#aha)"/>
+              <path class="flow" d="M636 344h32v-168h18" marker-end="url(#ah)"/>
+              <path class="flow" d="M636 352h24v-92h30" marker-end="url(#ah)"/>
+              <path class="flow flow--dash" d="M636 362h16v-12h38" marker-end="url(#ah)"/>
+
+              <!-- identity result feeds the gate -->
+              <path class="flow" d="M540 178v14" marker-end="url(#ah)"/>
+              <!-- the one item-content path: gate → exam client -->
+              <path class="flow flow--acc" d="M450 224H418V424H104V122" marker-end="url(#aha)"/>
+              <text x="436" y="428" fill="var(--accent-deep)">BLUE — GATED ITEM CONTENT: THE ONLY ROUTE TO A CANDIDATE</text>
+
+              <text x="20" y="456">SOLID: SYNCHRONOUS  ·  DASHED: ASYNCHRONOUS / BEST-EFFORT</text>
+            </svg>
+          </div>
+          <figcaption><b>FIG 1</b> System topology. The blue path is the only route by which question text reaches a candidate, and it is unreachable until the delivery gate derives a session key.</figcaption>
+        </figure>
+
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Subsystem</th><th>Responsibility</th><th>Explicitly does not</th></tr></thead>
+            <tbody>
+              <tr><td>Session orchestrator</td><td>Owns the session state machine and the authoritative clock; every transition is an event.</td><td>Never evaluates candidate behaviour.</td></tr>
+              <tr><td>Identity service</td><td>Document match, liveness scoring, dual-angle correlation, enrolment templates.</td><td>Never stores a raw ID number or ships a face image off-region.</td></tr>
+              <tr><td>Delivery gate</td><td>The single conjunction point: identity ∧ binding ∧ attestation → derive session key.</td><td>Never caches a derived key; never opens on a partial condition.</td></tr>
+              <tr><td>Generation + IRT</td><td>Variant synthesis inside declared ranges, solver verification, parameter calibration.</td><td>Never emits an unsolved or uncalibrated variant.</td></tr>
+              <tr><td>Evidence engine</td><td>Deterministic event emission, signing, verdict routing.</td><td>Never computes an aggregate, score or probability.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="media" data-doc-sec>
+        <h2><span class="sn">Section 02</span>WebRTC streaming engine</h2>
+        <p>
+          Two independent publishers per Level 3 session — the laptop's webcam and the phone's
+          rear camera — joined at a selective forwarding unit rather than peered to each other.
+          The SFU never mixes: each track is forwarded, recorded conditionally, and processed
+          on a separate worker so that a failure in mesh extraction cannot stall media.
+        </p>
+        <ul class="bullets">
+          <li><strong>Codecs.</strong> VP9 with simulcast at three spatial layers; the processor subscribes to the layer it needs, so a poor uplink degrades resolution rather than dropping the stream.</li>
+          <li><strong>Bitrate floor.</strong> 350 kbps per publisher at the lowest rung; below that the client falls to 5 fps stills plus audio and the session continues under the E12 protocol.</li>
+          <li><strong>Recording is conditional.</strong> The processor holds a rolling 60-second encrypted buffer. Only when a rule fires is a ±30 s clip cut, sealed and written to the media vault. Everything else is overwritten in place.</li>
+          <li><strong>Clip integrity.</strong> Each clip is content-addressed, and its hash is written into the event that caused it — so a clip cannot later be swapped for a different one without breaking the record.</li>
+          <li><strong>Failure isolation.</strong> Mesh extraction, correlation and clip-cutting run as separate consumers of the same track. Any of them can crash and restart without touching delivery.</li>
+        </ul>
+        <div class="note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="var(--accent)" stroke-width="1.4"/><path d="M8 4.6v4.2M8 11.1v.4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p><b>Why not peer-to-peer?</b> A direct peer connection between the candidate's two
+          devices would let the pair agree on a story the server cannot check. Both devices
+          publish independently to the SFU and neither can see the other's stream, so temporal
+          correlation is computed on evidence neither device controls.</p>
+        </div>
+      </section>
+
+      <section id="attest" data-doc-sec>
+        <h2><span class="sn">Section 03</span>Sealed-chip attestation verification</h2>
+        <p>
+          The companion app holds a key generated inside the device's secure element. Every media
+          payload is signed with it, and the signature is only meaningful because the vendor's
+          attestation service will vouch that the key lives in real, unmodified hardware.
+        </p>
+
+        <figure class="figure">
+          <div class="figure__frame">
+            <svg class="dg" viewBox="0 0 900 400" role="img" aria-label="Attestation sequence: the companion app requests a challenge, generates a hardware-backed assertion, and the verifier checks the receipt chain with the vendor before the orchestrator marks attestation as held.">
+              <!-- lanes -->
+              <text class="zlabel" x="20" y="24">COMPANION APP</text>
+              <text class="zlabel" x="255" y="24">ORCHESTRATOR</text>
+              <text class="zlabel" x="500" y="24">ATTESTATION VERIFIER</text>
+              <text class="zlabel" x="740" y="24">VENDOR SERVICE</text>
+              <line class="lane" x1="90" y1="36" x2="90" y2="360"/>
+              <line class="lane" x1="325" y1="36" x2="325" y2="360"/>
+              <line class="lane" x1="580" y1="36" x2="580" y2="360"/>
+              <line class="lane" x1="800" y1="36" x2="800" y2="360"/>
+
+              <defs>
+                <marker id="ah2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--ink-4)"/></marker>
+                <marker id="ah2a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--accent)"/></marker>
+              </defs>
+
+              <path class="flow" d="M90 66h228" marker-end="url(#ah2)"/>
+              <text x="104" y="60">01 · session join, device id</text>
+
+              <path class="flow flow--acc" d="M325 100H97" marker-end="url(#ah2a)"/>
+              <text x="104" y="94">02 · server nonce (single use, 60 s)</text>
+
+              <rect class="box box--acc" x="16" y="118" width="150" height="40" rx="8"/>
+              <text class="lbl" x="28" y="136">Secure element</text>
+              <text class="sub" x="28" y="150">signs nonce ‖ frame hash</text>
+
+              <path class="flow" d="M90 184h228" marker-end="url(#ah2)"/>
+              <text x="104" y="178">03 · assertion + attestation receipt</text>
+
+              <path class="flow" d="M325 214h248" marker-end="url(#ah2)"/>
+              <text x="338" y="208">04 · forward for verification</text>
+
+              <path class="flow" d="M580 244h213" marker-end="url(#ah2)"/>
+              <text x="592" y="238">05 · receipt chain check</text>
+
+              <path class="flow flow--acc" d="M800 278H587" marker-end="url(#ah2a)"/>
+              <text x="592" y="272">06 · genuine hardware · not emulated · app unmodified</text>
+
+              <rect class="box box--ink" x="440" y="296" width="196" height="40" rx="8"/>
+              <text class="lbl on-ink" x="452" y="314">attestation.held = true</text>
+              <text class="sub" x="452" y="328" fill="rgba(255,255,255,.55)">bound to this session id only</text>
+
+              <path class="flow flow--acc" d="M440 316H332" marker-end="url(#ah2a)"/>
+
+              <path class="flow flow--crit flow--dash" d="M580 360h-255" marker-end="url(#ah2)"/>
+              <text x="340" y="378" fill="var(--st-crit)">FAIL PATH · session refused before any exam material is addressed · E20 fallback to Level 2</text>
+            </svg>
+          </div>
+          <figcaption><b>FIG 2</b> Attestation is checked before the delivery gate is even evaluated, so a spoofed device never reaches the point where item content exists.</figcaption>
+        </figure>
+
+        <div class="code"><span class="c">// Every media payload from the companion app carries this envelope.</span>
+{
+  <span class="k">"session"</span>:  <span class="s">"S-77401"</span>,
+  <span class="k">"seq"</span>:      <span class="n">8841</span>,
+  <span class="k">"captured"</span>: <span class="s">"2026-07-30T11:42:06.114+05:30"</span>,  <span class="c">// advisory only</span>
+  <span class="k">"frame"</span>:    <span class="s">"sha256:9c1f…a07f"</span>,
+  <span class="k">"attest"</span>: {
+    <span class="k">"platform"</span>: <span class="s">"ios.app_attest"</span>,       <span class="c">// or android.play_integrity</span>
+    <span class="k">"nonce"</span>:    <span class="s">"srv:3f9a…d201"</span>,          <span class="c">// server-issued, single use</span>
+    <span class="k">"assertion"</span>: <span class="s">"MIIB…"</span>,
+    <span class="k">"receipt"</span>:   <span class="s">"MIIG…"</span>
+  },
+  <span class="k">"sig"</span>: <span class="s">"ed25519:7c40…91ba"</span>
+}
+
+<span class="c">// Verification is a conjunction. Any false short-circuits the session.</span>
+<span class="k">verified</span> = chainValid(receipt)
+        <span class="k">&amp;&amp;</span> nonceMatches(assertion, issuedNonce)
+        <span class="k">&amp;&amp;</span> frameHashSigned(assertion, frame)
+        <span class="k">&amp;&amp;</span> <span class="k">!</span>emulator <span class="k">&amp;&amp;</span> <span class="k">!</span>rooted <span class="k">&amp;&amp;</span> <span class="k">!</span>virtualCamera
+        <span class="k">&amp;&amp;</span> boundToSession(assertion, sessionId)</div>
+      </section>
+
+      <section id="binding" data-doc-sec>
+        <h2><span class="sn">Section 04</span>Screen-binding timing</h2>
+        <p>
+          The binding loop is a latency argument. A token that appears on screen and returns from
+          a different device inside two seconds could only have been seen. A decoy display, a
+          photograph or a relayed screen adds either capture delay or a sequence mismatch, and
+          both are visible against the server's own clock.
+        </p>
+
+        <figure class="figure">
+          <div class="figure__frame">
+            <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="Screen binding timing: token issued at zero milliseconds, rendered by 90, captured by 310, decoded by 400, arrives at the server at 412 milliseconds, well inside the 2000 millisecond validity window which closes before the next token is issued at 3000 milliseconds.">
+              <defs>
+                <marker id="ah3" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--accent)"/></marker>
+              </defs>
+
+              <!-- axis -->
+              <line x1="60" y1="200" x2="856" y2="200" stroke="var(--axis)" stroke-width="1"/>
+              <g>
+                <line x1="60" y1="196" x2="60" y2="206" stroke="var(--axis)"/><text x="60" y="222" text-anchor="middle">0 ms</text>
+                <line x1="260" y1="196" x2="260" y2="206" stroke="var(--axis)"/><text x="260" y="222" text-anchor="middle">500</text>
+                <line x1="460" y1="196" x2="460" y2="206" stroke="var(--axis)"/><text x="460" y="222" text-anchor="middle">1000</text>
+                <line x1="660" y1="196" x2="660" y2="206" stroke="var(--axis)"/><text x="660" y="222" text-anchor="middle">2000</text>
+                <line x1="856" y1="196" x2="856" y2="206" stroke="var(--axis)"/><text x="856" y="222" text-anchor="middle">3000</text>
+              </g>
+
+              <!-- validity window -->
+              <rect x="60" y="86" width="600" height="98" rx="8" fill="var(--accent)" fill-opacity=".08"/>
+              <text x="70" y="104" fill="var(--accent-deep)">VALIDITY WINDOW · 2000 ms · MEASURED ON THE SERVER CLOCK</text>
+              <line x1="660" y1="86" x2="660" y2="200" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+              <!-- TTL -->
+              <rect x="60" y="46" width="856" height="0" fill="none"/>
+              <line x1="60" y1="62" x2="856" y2="62" stroke="var(--ink-4)" stroke-width="1" stroke-dasharray="4 4"/>
+              <text x="70" y="56">TOKEN TTL · 3000 ms · NEXT TOKEN ISSUED AT 3000</text>
+
+              <!-- events -->
+              <g>
+                <circle cx="60" cy="200" r="5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>
+                <path class="flow flow--acc" d="M60 194v-28" marker-end="url(#ah3)"/>
+                <text class="lbl" x="52" y="158">Issue</text><text x="52" y="146">server</text>
+
+                <circle cx="96" cy="200" r="4.5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>
+                <text class="lbl" x="88" y="252">Render</text><text x="88" y="264">+90 ms</text>
+
+                <circle cx="184" cy="200" r="4.5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>
+                <text class="lbl" x="176" y="252">Capture</text><text x="176" y="264">+310 ms</text>
+
+                <circle cx="220" cy="200" r="4.5" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>
+                <text class="lbl" x="212" y="180">Decode</text><text x="212" y="168">+400 ms</text>
+
+                <circle cx="225" cy="200" r="6" fill="var(--st-clear)" stroke="var(--surface)" stroke-width="2"/>
+                <path class="flow flow--acc" d="M225 194v-40" marker-end="url(#ah3)"/>
+                <text class="lbl" x="238" y="150">Server receives · 412 ms · WITHIN_WINDOW</text>
+              </g>
+
+              <!-- decoy -->
+              <g>
+                <circle cx="740" cy="200" r="6" fill="var(--st-crit)" stroke="var(--surface)" stroke-width="2"/>
+                <text class="lbl" x="640" y="272" fill="var(--st-crit)">Decoy display · 2412 ms · LAPSE_LOGGED</text>
+                <line x1="740" y1="206" x2="740" y2="248" stroke="var(--st-crit)" stroke-width="1.2" stroke-dasharray="3 3"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption><b>FIG 3</b> A single binding cycle. Three consecutive in-window cycles are required before the delivery gate evaluates; a lapse is an event routed to human review, never an automatic consequence.</figcaption>
+        </figure>
+      </section>
+
+      <section id="gate" data-doc-sec>
+        <h2><span class="sn">Section 05</span>The delivery gate</h2>
+        <p>
+          The gate is the architectural heart of the product. It is deliberately small, boring and
+          conjunctive: five predicates, no weights, no thresholds to tune, no partial credit.
+        </p>
+        <div class="code"><span class="c">// Delivery gate — the whole security argument in one function.</span>
+<span class="c">// There is no configuration that turns any clause off.</span>
+
+<span class="k">function</span> evaluateGate(session) {
+  <span class="k">const</span> ok =
+       session.identity.level      <span class="k">===</span> <span class="s">'L3'</span>          <span class="c">// FR-A-01…05</span>
+    <span class="k">&amp;&amp;</span> session.identity.correlation <span class="k">&gt;=</span> <span class="n">0.94</span>          <span class="c">// rolling 8 s window</span>
+    <span class="k">&amp;&amp;</span> session.attestation.held    <span class="k">===</span> <span class="k">true</span>          <span class="c">// FR-A-06</span>
+    <span class="k">&amp;&amp;</span> session.binding.consecutive <span class="k">&gt;=</span> <span class="n">3</span>             <span class="c">// FR-B-04</span>
+    <span class="k">&amp;&amp;</span> session.consent.complete    <span class="k">===</span> <span class="k">true</span>;         <span class="c">// FR-E-01</span>
+
+  <span class="k">if</span> (<span class="k">!</span>ok) <span class="k">return</span> { open: <span class="k">false</span> };            <span class="c">// no reason codes leak to the client</span>
+
+  <span class="c">// Key exists only for the lifetime of this session, in memory, on one node.</span>
+  <span class="k">const</span> key = hkdf(masterKey, session.id <span class="k">+</span> session.identity.templateHash);
+  <span class="k">return</span> { open: <span class="k">true</span>, key };
+}</div>
+        <ul class="bullets">
+          <li><strong>No partial opening.</strong> There is no state in which some items are released and others are not because a condition was "mostly" met.</li>
+          <li><strong>Re-evaluated continuously.</strong> The gate is not a one-time check at T−0; losing a condition mid-exam pauses delivery of subsequent items while the timer halts.</li>
+          <li><strong>Key never persisted.</strong> The derived key lives in the orchestrator's memory for the session and is destroyed at seal. A database dump contains no readable paper, past or future.</li>
+        </ul>
+      </section>
+
+      <section id="generation" data-doc-sec>
+        <h2><span class="sn">Section 06</span>Generation and IRT pipeline</h2>
+        <p>
+          Generation is bounded rewriting, not authorship. The model may only move values the item
+          author declared movable, and every variant must survive two independent gates —
+          a symbolic solver and the IRT calibrator — before it can be addressed to a candidate.
+        </p>
+
+        <figure class="figure">
+          <div class="figure__frame">
+            <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="Generation pipeline: item template, parameter sampler, language model rewrite, symbolic solver gate, IRT calibrator gate, then encryption and streaming to the candidate. Rejected variants loop back to the sampler.">
+              <defs>
+                <marker id="ah4" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--ink-4)"/></marker>
+                <marker id="ah4a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--accent)"/></marker>
+                <marker id="ah4c" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0 0l6 3-6 3z" fill="var(--st-crit)"/></marker>
+              </defs>
+
+              <rect class="box" x="16" y="84" width="126" height="56" rx="10"/>
+              <text class="lbl" x="28" y="106">Item template</text>
+              <text class="sub" x="28" y="120">typed params + ranges</text>
+              <text class="sub" x="28" y="132">answer-preserving ops</text>
+
+              <rect class="box" x="170" y="84" width="126" height="56" rx="10"/>
+              <text class="lbl" x="182" y="106">Sampler</text>
+              <text class="sub" x="182" y="120">per-candidate seed</text>
+              <text class="sub" x="182" y="132">no repeats in cohort</text>
+
+              <rect class="box" x="324" y="84" width="126" height="56" rx="10"/>
+              <text class="lbl" x="336" y="106">Surface rewrite</text>
+              <text class="sub" x="336" y="120">names · place · phrasing</text>
+              <text class="sub" x="336" y="132">option order</text>
+
+              <rect class="box box--acc" x="478" y="84" width="126" height="56" rx="10"/>
+              <text class="lbl" x="490" y="106">Solver gate</text>
+              <text class="sub" x="490" y="120">symbolic re-solve</text>
+              <text class="sub" x="490" y="132">must equal closed form</text>
+
+              <rect class="box box--acc" x="632" y="84" width="126" height="56" rx="10"/>
+              <text class="lbl" x="644" y="106">IRT calibrator</text>
+              <text class="sub" x="644" y="120">Δb ≤ .05 · Δa ≤ .01</text>
+              <text class="sub" x="644" y="132">Δt ≤ 4 s</text>
+
+              <rect class="box box--ink" x="786" y="84" width="100" height="56" rx="10"/>
+              <text class="lbl on-ink" x="798" y="106">Seal</text>
+              <text class="sub" x="798" y="120" fill="rgba(255,255,255,.55)">encrypt to</text>
+              <text class="sub" x="798" y="132" fill="rgba(255,255,255,.55)">session key</text>
+
+              <path class="flow" d="M142 112h20" marker-end="url(#ah4)"/>
+              <path class="flow" d="M296 112h20" marker-end="url(#ah4)"/>
+              <path class="flow" d="M450 112h20" marker-end="url(#ah4)"/>
+              <path class="flow flow--acc" d="M604 112h20" marker-end="url(#ah4a)"/>
+              <path class="flow flow--acc" d="M758 112h20" marker-end="url(#ah4a)"/>
+
+              <!-- reject loops -->
+              <path class="flow flow--crit flow--dash" d="M541 140v42H233v-36" marker-end="url(#ah4c)"/>
+              <text x="360" y="198" fill="var(--st-crit)">REJECT · answer mismatch · variant discarded, never delivered</text>
+              <path class="flow flow--crit flow--dash" d="M695 140v72H233v-66" marker-end="url(#ah4c)"/>
+              <text x="360" y="228" fill="var(--st-crit)">REJECT · outside parity tolerance · logged with parameters</text>
+
+              <rect class="box" x="16" y="238" width="380" height="44" rx="10"/>
+              <text class="lbl" x="28" y="258">Pre-calibrated fallback pool</text>
+              <text class="sub" x="28" y="272">used when the generation service degrades — delivery never blocks on a model (E21)</text>
+              <path class="flow flow--dash" d="M396 260h286v-108" marker-end="url(#ah4)"/>
+
+              <text x="470" y="272">Median added latency of both gates: 4.8 s at p50 · 11.2 s at p95</text>
+            </svg>
+          </div>
+          <figcaption><b>FIG 4</b> Generation pipeline. Two hard gates and a fallback pool. A rejected variant costs milliseconds; a delivered bad variant costs the exam's validity.</figcaption>
+        </figure>
+
+        <p>
+          The calibration mathematics — how the b-parameter is estimated for a variant that has
+          never been sat by anyone, and why the tolerance is ±0.05 logits — is set out in the
+          <a href="psychometrics.html">Psychometric Equivalence Specification</a>.
+        </p>
+      </section>
+
+      <section id="evidence" data-doc-sec>
+        <h2><span class="sn">Section 07</span>Evidence ledger</h2>
+        <p>
+          The ledger is append-only, content-addressed and signed at write time. Its most important
+          property is not immutability but <strong>determinism</strong>: the same session inputs,
+          replayed through the same engine and rule-set versions, produce byte-identical events.
+          That is what makes the record evidence rather than a rendering.
+        </p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Property</th><th>Mechanism</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td>Append-only</td><td>Hash-chained segments, per-shift Merkle root published to the agency</td><td>Nothing can be quietly edited after a result is contested</td></tr>
+              <tr><td>Deterministic</td><td>Pure rule evaluation; no wall-clock reads, no randomness, no model calls in the evidence path</td><td>An auditor in 2033 gets the same trail as the reviewer did in 2026</td></tr>
+              <tr><td>Versioned</td><td>Engine version and rule-set version stamped on every session</td><td>Rules can improve without rewriting history</td></tr>
+              <tr><td>Bounded</td><td>Closed event vocabulary; unknown types rejected at write</td><td>Prevents behavioural telemetry creeping in through a generic event</td></tr>
+              <tr><td>Candidate-readable</td><td>Same records rendered in plain language in the candidate report</td><td>A candidate can contest facts, not vibes</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note note--accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.4l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p><b>No model in the evidence path.</b> Machine-learning components (mesh extraction,
+          correlation, OCR) run upstream and emit measurements. The rules that turn measurements
+          into events are ordinary deterministic code, so an event can always be traced to a
+          threshold a human chose and can defend.</p>
+        </div>
+      </section>
+
+      <section id="threat" data-doc-sec>
+        <h2><span class="sn">Section 08</span>Threat model</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Attack</th><th>Capability assumed</th><th>Structural defence</th><th>Residual</th></tr></thead>
+            <tbody>
+              <tr><td>Advance paper leak</td><td>Insider access to the item bank</td><td>No candidate-addressable paper exists before T−0; bank is encrypted and item-level access is logged</td><td>Item-bank exposure reveals a bank, not a paper — and banks are large, versioned and rotated</td></tr>
+              <tr><td>Proxy sitter</td><td>A confederate physically present</td><td>Dual-angle temporal correlation + continuous enrolment matching</td><td>Extremely close relative under identical lighting — mitigated by enrolment templates, not population models</td></tr>
+              <tr><td>Deepfake on primary camera</td><td>Real-time face synthesis, virtual camera</td><td>Second physical camera at an arbitrary angle, hardware attestation, virtual-camera refusal</td><td>Requires simultaneously compromising a sealed chip — no known practical path</td></tr>
+              <tr><td>Decoy display / relayed screen</td><td>Second monitor, screen share, remote desktop</td><td>Screen-binding token loop + status agent display topology</td><td>Sub-2 s relay chain across two devices remains theoretically possible; the latency budget is the defence and it is measured, not assumed</td></tr>
+              <tr><td>Emulated companion device</td><td>Rooted phone or emulator</td><td>Attestation receipt chain verified vendor-side</td><td>Vendor compromise; mitigated by E20 fallback and agency notification</td></tr>
+              <tr><td>Replay of a valid session</td><td>Captured media and tokens</td><td>Single-use server nonces, session-bound assertions, server-clock validity</td><td>None material</td></tr>
+              <tr><td>Coercion in the room</td><td>Family or agent pressuring the candidate</td><td>Environmental events, ambient audio, discreet duress signal, civic-node alternative</td><td><strong>Unsolved by technology.</strong> Stated plainly rather than papered over.</td></tr>
+              <tr><td>Malicious insider at TrustXD</td><td>Production access</td><td>Per-session keys never persisted, four-eyes on rule changes, published Merkle roots</td><td>Detection rather than prevention; the ledger makes tampering visible after the fact</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="scale" data-doc-sec>
+        <h2><span class="sn">Section 09</span>Scale and failure domains</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Dimension</th><th>Design point</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Peak concurrency</td><td class="num">2,500,000 L3 sessions</td><td>Sharded by session id; no cross-shard read on the delivery path</td></tr>
+              <tr><td>Media egress</td><td class="num">~1.1 Tbps</td><td>Two publishers × 350–900 kbps, regional SFU pools, no cross-region media</td></tr>
+              <tr><td>Binding messages</td><td class="num">~833 k/s</td><td>One token read per session per 3 s; tiny payloads on a dedicated WSS tier</td></tr>
+              <tr><td>Generation throughput</td><td class="num">~30 k variants/s at open</td><td>Absorbed by pre-warm; fallback pool covers the first two minutes of a shift</td></tr>
+              <tr><td>Ledger writes</td><td class="num">~120 k events/s</td><td>Batched into hash-chained segments; Merkle root published per shift</td></tr>
+              <tr><td>Failure domain</td><td>One region = one shift's worth of sessions</td><td>A region loss triggers the E25 protocol: administrative Not-assessable and automatic re-sit</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>What degrades first, by design</h3>
+        <ol class="steps">
+          <li><strong>Video resolution</strong>, then frame rate, then video entirely — audio and binding are the last things to go.</li>
+          <li><strong>Generation</strong> falls back to the pre-calibrated pool before delivery is ever blocked.</li>
+          <li><strong>Attestation</strong> falls back to cached receipts, then to a declared Level 2 with the agency notified and the level printed on the result.</li>
+          <li><strong>Nothing</strong> degrades the evidence path. If events cannot be written, the session pauses — a record with holes is worse than a paused exam.</li>
+        </ol>
+      </section>
+
+      <div class="docnav">
+        <a href="prd.html"><b>Previous</b><span>← Product requirements</span></a>
+        <a href="psychometrics.html"><b>Next deliverable</b><span>Psychometric equivalence →</span></a>
+      </div>
+    </article>
+  </div>
+</div>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__bottom" style="border-top:0;padding-top:0">
+      <span>© <span data-year></span> TrustXD ExamOS. Concept document — figures are illustrative.</span>
+      <span><a href="index.html">Home</a> · <a href="prd.html">PRD</a> · <a href="psychometrics.html">Psychometrics</a> · <a href="pitch.html">Deck</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js" defer></script>
+</body>
+</html>

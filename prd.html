@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Requirements — TrustXD ExamOS</title>
+<meta name="description" content="Product Requirements Document for TrustXD ExamOS: personas, user stories, functional and non-functional requirements, and twenty-six edge-case protocols.">
+<meta name="theme-color" content="#F4F3EF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='1' y='1' width='24' height='24' rx='8' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%232540FF' stroke-width='1.8' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23F4F3EF' stroke='%230B0C0E' stroke-width='1.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/core.css">
+<link rel="stylesheet" href="assets/css/doc.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html" aria-label="TrustXD ExamOS home">
+      <svg class="brand__mark" viewBox="0 0 26 26" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 8l10 10M18 8L8 18" stroke="#2540FF" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="13" cy="13" r="3.2" fill="var(--paper)" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span class="brand__name"><b>TrustXD</b> <span>ExamOS</span></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="index.html#modules">Platform</a>
+      <a class="nav__link" href="prd.html" aria-current="page">PRD</a>
+      <a class="nav__link" href="architecture.html">Architecture</a>
+      <a class="nav__link" href="psychometrics.html">Psychometrics</a>
+      <a class="nav__link" href="pitch.html">Deck</a>
+    </nav>
+    <div class="nav__cta">
+      <a class="btn btn--sm" href="index.html#pilot" data-magnet="0.2">Request a pilot</a>
+      <button class="nav__burger" aria-label="Open menu" aria-expanded="false"><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" role="dialog" aria-label="Menu" aria-modal="true">
+  <ul class="menu__list">
+    <li class="menu__item"><a href="index.html">Home</a></li>
+    <li class="menu__item"><a href="prd.html">Product requirements</a></li>
+    <li class="menu__item"><a href="architecture.html">Architecture</a></li>
+    <li class="menu__item"><a href="psychometrics.html">Psychometrics</a></li>
+    <li class="menu__item"><a href="pitch.html">Pitch deck</a></li>
+  </ul>
+  <div class="menu__foot">
+    <p class="mono muted">TRUSTXD EXAMOS · <span data-year></span></p>
+    <a class="btn btn--accent btn--sm" href="index.html#pilot">Request a pilot</a>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="dochero">
+  <div class="wrap">
+    <div class="dochero__meta">
+      <span class="kicker">Deliverable 01</span>
+      <span class="chip">Version 1.0 · Draft for evaluation</span>
+      <span class="mono dim">LAST REVISED 30 JULY 2026</span>
+    </div>
+    <h1 data-split>Product Requirements Document</h1>
+    <p class="lead" data-rise>
+      What TrustXD ExamOS must do, for whom, and what it must refuse to do. Written to be read
+      by a procurement committee, an examinations controller and an engineer in the same sitting.
+    </p>
+
+    <div class="dochero__facts" data-stagger="0.06">
+      <div class="dochero__fact"><b>Scope</b><span>Levels 1–3 remote delivery, national and university scale</span></div>
+      <div class="dochero__fact"><b>Personas</b><span>Candidate · Reviewer · Controller · Agency · Auditor</span></div>
+      <div class="dochero__fact"><b>Requirements</b><span>62 functional · 21 non-functional</span></div>
+      <div class="dochero__fact"><b>Edge cases</b><span>26 defined protocols, all candidate-favourable</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="doc">
+    <!-- TOC -->
+    <aside class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a class="toc__link is-active" href="#purpose">1 · Purpose and scope</a></li>
+        <li><a class="toc__link" href="#principles">2 · Product principles</a></li>
+        <li><a class="toc__link" href="#personas">3 · Personas</a></li>
+        <li><a class="toc__link" href="#stories">4 · User stories</a></li>
+        <li><a class="toc__link" href="#functional">5 · Functional requirements</a></li>
+        <li><a class="toc__link" href="#nonfunctional">6 · Non-functional requirements</a></li>
+        <li><a class="toc__link" href="#edge">7 · Edge-case protocols</a></li>
+        <li><a class="toc__link" href="#verdicts">8 · Verdicts and appeals</a></li>
+        <li><a class="toc__link" href="#data">9 · Data and retention</a></li>
+        <li><a class="toc__link" href="#rollout">10 · Rollout and success measures</a></li>
+        <li><a class="toc__link" href="#risks">11 · Risks and open questions</a></li>
+      </ol>
+    </aside>
+
+    <!-- ARTICLE -->
+    <article class="prose">
+
+      <section id="purpose" data-doc-sec>
+        <h2><span class="sn">Section 01</span>Purpose and scope</h2>
+        <p>
+          TrustXD ExamOS is assessment infrastructure for examinations whose outcome materially
+          changes a person's life. Its purpose is to make three specific attacks structurally
+          impossible rather than statistically unlikely: <strong>advance paper leakage</strong>,
+          <strong>proxy test-taking</strong>, and <strong>unaccountable automated judgement</strong>.
+        </p>
+        <p>
+          In scope: candidate onboarding and identity assurance, dual-device capture, screen
+          binding, just-in-time paper generation with psychometric parity, delivery, evidence
+          capture, human review, and candidate-facing transparency — for Levels 1 through 3 as
+          defined in §6.
+        </p>
+        <p>
+          Out of scope for v1.0: subjective long-form marking, practical or laboratory
+          examinations, viva voce, and any exam requiring physical apparatus. Also explicitly out
+          of scope, permanently: emotion recognition, gaze-based "attention scoring", keystroke
+          biometrics, and any probabilistic integrity score.
+        </p>
+        <div class="note note--accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.4"/><path d="M8 4.6v4.2M8 11.1v.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p><b>The negative requirement is a requirement.</b> If a future release can produce a
+          number that purports to represent a candidate's honesty, the product has failed its
+          own specification. This is enforced by schema: no such field exists in the evidence
+          model, and the review API rejects any payload containing one.</p>
+        </div>
+      </section>
+
+      <section id="principles" data-doc-sec>
+        <h2><span class="sn">Section 02</span>Product principles</h2>
+        <ol class="steps">
+          <li><strong>Structure beats surveillance.</strong> Prefer a design where cheating is impossible over a design that watches harder for it. The paper that does not exist cannot leak.</li>
+          <li><strong>Evidence, never inference.</strong> The system records what happened with timestamps. It does not conclude what a person intended.</li>
+          <li><strong>Ambiguity favours the candidate.</strong> Every undecidable state resolves to <em>Not assessable</em> with a free re-sit, never to a penalty.</li>
+          <li><strong>The candidate sees what we see.</strong> Self-view, evidence trail, reviewer access log and retention clock are all candidate-visible by default.</li>
+          <li><strong>Assurance is declared, not assumed.</strong> An institution picks a level; the level appears on the consent screen and on the result.</li>
+          <li><strong>Access is a design constraint.</strong> A requirement that only works for candidates with two new phones and fibre broadband is a defect, not a feature.</li>
+        </ol>
+      </section>
+
+      <section id="personas" data-doc-sec>
+        <h2><span class="sn">Section 03</span>Personas</h2>
+        <div class="dtable">
+          <table>
+            <thead>
+              <tr><th>Persona</th><th>Context</th><th>Primary need</th><th>Failure they fear</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Aditi — candidate</strong><br><span class="muted">18, NEET aspirant, Tier-3 town</span></td>
+                <td>Shared 4G, one laptop borrowed from a cousin, a mid-range Android phone.</td>
+                <td>To sit the exam without an eleven-hour journey, and to know exactly what is recorded.</td>
+                <td>Being failed by software for a dropped connection she did not cause.</td>
+              </tr>
+              <tr>
+                <td><strong>Rakesh — reviewer</strong><br><span class="muted">Contracted, independent pool</span></td>
+                <td>Reviews flagged sessions across many institutions; never sees candidate names first.</td>
+                <td>Complete, ordered evidence and a decision that is defensible in writing.</td>
+                <td>Being asked to rubber-stamp a machine's opinion.</td>
+              </tr>
+              <tr>
+                <td><strong>Dr Menon — controller of examinations</strong><br><span class="muted">University board</span></td>
+                <td>Answerable to a vice-chancellor, a senate and the press on exam day.</td>
+                <td>Predictable delivery, a live operational picture, and an audit file.</td>
+                <td>A viral video of a candidate wrongly ejected.</td>
+              </tr>
+              <tr>
+                <td><strong>Agency programme office</strong><br><span class="muted">National testing body</span></td>
+                <td>Millions of candidates, multiple shifts, statutory obligations.</td>
+                <td>Scale, evidence, cost per candidate, and legal defensibility.</td>
+                <td>A leak, and the cancellation that follows it.</td>
+              </tr>
+              <tr>
+                <td><strong>Statutory auditor</strong><br><span class="muted">CAG / data-protection board</span></td>
+                <td>Post-hoc inspection, sometimes years later.</td>
+                <td>Reproducible records, purge evidence, and consent receipts.</td>
+                <td>A system that cannot show its working.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="stories" data-doc-sec>
+        <h2><span class="sn">Section 04</span>User stories</h2>
+        <p>Twelve representative stories; the full backlog carries 84. Acceptance criteria are written to be testable without interpretation.</p>
+
+        <h3>Candidate</h3>
+        <div class="story">
+          <div class="story__head"><span class="chip">US-C-01</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As a candidate, I want to check my device and network days before the exam, so that I discover problems while I can still solve them.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Readiness check runs from the same client build as exam day and reports upload bandwidth, camera resolution, battery health and rig geometry.</li>
+              <li>A failed check returns a specific remedy, never a generic error.</li>
+              <li>Results are stored against the registration and re-run automatically at T−45.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-C-02</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As a candidate, I want to grant each permission separately and see a receipt, so that consent is a record and not a checkbox.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Camera, microphone, ID scan and face matching are four independent grants.</li>
+              <li>Consent UI renders in English and Hindi at parity; language choice persists.</li>
+              <li>A signed receipt (Ed25519) is issued to the candidate before first capture and is downloadable at any later date.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-C-03</span><span class="mono dim">MUST · L2–L3</span></div>
+          <p class="story__q">As a candidate, I want to see my own phone camera stream at full size throughout, so that I always know what is in frame.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Self-view is on by default, cannot be reduced below 240 px on the shortest edge, and can be repositioned but not disabled.</li>
+              <li>Any capture state change (paused, resumed, degraded) is announced visually and to assistive technology.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-C-04</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As a candidate whose session was flagged, I want to read the same evidence the reviewer read, so that I can respond to facts rather than to a score.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>The candidate report contains the full ordered event trail with timestamps.</li>
+              <li>Any clip shown to a reviewer is playable by the candidate.</li>
+              <li>The report lists every account that accessed the file, with role and timestamp.</li>
+              <li>A dispute can be opened from within the report; opening one freezes the retention clock.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Reviewer</h3>
+        <div class="story">
+          <div class="story__head"><span class="chip">US-R-01</span><span class="mono dim">MUST · L2–L3</span></div>
+          <p class="story__q">As a reviewer, I want flagged sessions presented as an ordered evidence trail, so that I decide from the record rather than from an impression.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Events are shown in strict server-clock order with the triggering rule named.</li>
+              <li>Candidate identity is masked until a verdict is committed.</li>
+              <li>The UI offers exactly three verdicts and requires a written rationale for any verdict other than Clear.</li>
+              <li>No aggregate score, percentage or ranking is displayed anywhere in the reviewer UI.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-R-02</span><span class="mono dim">SHOULD · L3</span></div>
+          <p class="story__q">As a reviewer, I want to escalate a session I cannot decide, so that difficult cases reach a second independent reviewer instead of a coin flip.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Escalation is a first-class action, not an absence of decision.</li>
+              <li>The second reviewer cannot see the first reviewer's rationale until they commit their own.</li>
+              <li>Disagreement routes to a three-person panel; the panel's reasoning joins the candidate's record.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Controller and agency</h3>
+        <div class="story">
+          <div class="story__head"><span class="chip">US-A-01</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As a controller, I want a live operational picture of delivery health, so that I can answer questions during the exam rather than after it.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Concurrency, gate latency, queue depth and disposition update at ≤ 10 s freshness.</li>
+              <li>Regional degradation is surfaced as an aggregate, never as a list of named candidates.</li>
+              <li>Every panel is exportable as a timestamped CSV for the audit file.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-A-02</span><span class="mono dim">MUST · L2–L3</span></div>
+          <p class="story__q">As an agency, I want to declare an incident that affects a region and reschedule affected candidates in bulk, so that a power grid failure is not a candidate's problem.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Incident declaration takes a geography, a time window and a reason code.</li>
+              <li>Affected sessions are marked <em>Not assessable — administrative</em>, with a re-sit slot issued automatically.</li>
+              <li>The incident and its blast radius are written to the audit ledger.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Item author and psychometrician</h3>
+        <div class="story">
+          <div class="story__head"><span class="chip">US-P-01</span><span class="mono dim">MUST · L2–L3</span></div>
+          <p class="story__q">As an item author, I want to declare which parts of an item may vary and within what ranges, so that generation cannot change what the item measures.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Templates declare typed parameters with ranges, units and answer-preserving transforms.</li>
+              <li>Any generated variant is machine-solved and compared against the template's closed-form answer before release.</li>
+              <li>A variant that changes the number of options, the cognitive operation or the required formula is rejected at build time.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-P-02</span><span class="mono dim">MUST · L2–L3</span></div>
+          <p class="story__q">As a psychometrician, I want every delivered variant's IRT parameters recorded, so that I can prove cohort fairness after the fact.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>a, b, c and expected solve time are persisted per delivered variant per candidate.</li>
+              <li>Any variant outside tolerance is rejected pre-delivery and the rejection is logged with its parameters.</li>
+              <li>Post-administration DIF analysis across language, region and gender is produced within 72 hours.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Auditor</h3>
+        <div class="story">
+          <div class="story__head"><span class="chip">US-X-01</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As an auditor, I want to replay a session's evidence years later and get an identical trail, so that the record is evidence rather than a rendering.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Event records are append-only, content-addressed and signed at write time.</li>
+              <li>Replaying the same inputs through the same engine version produces byte-identical output.</li>
+              <li>Engine version, rule-set version and model version are recorded on every session.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story">
+          <div class="story__head"><span class="chip">US-X-02</span><span class="mono dim">MUST · L1–L3</span></div>
+          <p class="story__q">As an auditor, I want proof that data was deleted, so that a retention policy is a fact rather than a promise.</p>
+          <div class="story__ac"><b>Acceptance criteria</b>
+            <ul>
+              <li>Each purge emits a signed record naming the object, its hash and the policy that triggered deletion.</li>
+              <li>Purge records survive the data they describe and are themselves retained for seven years.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="functional" data-doc-sec>
+        <h2><span class="sn">Section 05</span>Functional requirements</h2>
+        <p>Abbreviated to the load-bearing set. <code>M</code> = must, <code>S</code> = should, <code>C</code> = could.</p>
+
+        <h3>Module A — identity and spatial verification</h3>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Requirement</th><th>Level</th><th>Pri</th></tr></thead>
+            <tbody>
+              <tr><td class="id">FR-A-01</td><td>Parse Aadhaar, passport or driving licence entirely on device; transmit field hashes and a match decision only.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-02</td><td>Run active liveness with randomised prompts drawn from a set of at least eight movement classes, including an ear-inspection rotation.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-03</td><td>Construct a 468-point facial mesh and verify depth symmetry; reject flat-surface presentations.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-04</td><td>Require the secondary device to sit between 60° and 120° from the primary optical axis, verified geometrically before session start.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-05</td><td>Correlate head-motion vectors from both cameras over a rolling 8-second window; hold correlation ≥ 0.94 to remain in Level 3.</td><td>L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-06</td><td>Require hardware attestation (App Attest / Play Integrity) on every media payload from the secondary device; verify the receipt chain server-side.</td><td>L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-07</td><td>Refuse sessions from emulators, rooted or jailbroken devices, and virtual camera drivers, before any exam material is addressed.</td><td>L3</td><td>M</td></tr>
+              <tr><td class="id">FR-A-08</td><td>Support religious head coverings, prosthetics and facial differences without additional friction; verification adapts, the candidate does not.</td><td>L1–L3</td><td>M</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Module B — screen binding</h3>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Requirement</th><th>Level</th><th>Pri</th></tr></thead>
+            <tbody>
+              <tr><td class="id">FR-B-01</td><td>Derive a per-session secret server-side and render a visual token with a 3-second lifetime on the primary display.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-B-02</td><td>Read the token on the secondary device and return it over a WebSocket independent of the primary client's transport.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-B-03</td><td>Validate arrival against the server's NTP-disciplined clock within a 2000 ms window; never trust a client-supplied timestamp.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-B-04</td><td>Require three consecutive successful cycles before the delivery gate will evaluate.</td><td>L3</td><td>M</td></tr>
+              <tr><td class="id">FR-B-05</td><td>Record every lapse as a discrete event with observed sequence number and measured delta; never aggregate lapses into a score.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-B-06</td><td>Degrade the token to a high-contrast, large-format glyph set when the secondary camera reports low resolution or poor light.</td><td>L2–L3</td><td>S</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Module C — JIT generation and delivery</h3>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Requirement</th><th>Level</th><th>Pri</th></tr></thead>
+            <tbody>
+              <tr><td class="id">FR-C-01</td><td>Hold the item bank encrypted at rest; derive the session decryption key only after Modules A and B both hold, and never persist it client-side.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-02</td><td>Generate a per-candidate variant set at T−0, including for late arrivals, from declared parameter ranges only.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-03</td><td>Vary numeric parameters, named entities, phrasing and option order; never vary option count or the cognitive operation under test.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-04</td><td>Machine-solve every variant against the template's closed form and reject any mismatch before delivery.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-05</td><td>Submit every variant to the IRT calibrator; reject any variant outside Δb ±0.05 logits, Δa ±0.01 or Δt̄ ±4 s.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-06</td><td>Stream items individually; never place the complete paper in client memory or storage at one time.</td><td>L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-07</td><td>Fall back to a pre-generated, pre-calibrated variant pool if the generation service degrades, without pausing delivery.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-C-08</td><td>Apply the candidate's declared accessibility profile to the timing model at generation time, not as an afterthought.</td><td>L1–L3</td><td>M</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Modules D and E — evidence, review and candidate rights</h3>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Requirement</th><th>Level</th><th>Pri</th></tr></thead>
+            <tbody>
+              <tr><td class="id">FR-D-01</td><td>Emit deterministic, append-only, signed event records; identical inputs must produce byte-identical output.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-D-02</td><td>Expose exactly three verdicts. Reject at the API layer any payload containing a probability, score or ranking.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-D-03</td><td>Route every flagged session to a trained human reviewer; no verdict may be committed by an automated process.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-D-04</td><td>Mask candidate identity in the reviewer UI until a verdict is committed.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-D-05</td><td>Require a written rationale for any verdict other than Clear, stored with the record and visible to the candidate.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-E-01</td><td>Capture itemised consent per permission, bilingually, with a signed receipt issued before first capture.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-E-02</td><td>Display the candidate's secondary stream to the candidate at full size for the entire session.</td><td>L2–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-E-03</td><td>Destroy unflagged media at session seal; retain flagged clips for 30 days encrypted, then purge with a signed record.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-E-04</td><td>Show the candidate every access to their evidence, with role and timestamp.</td><td>L1–L3</td><td>M</td></tr>
+              <tr><td class="id">FR-E-05</td><td>Allow a dispute to be opened from the candidate report; freeze the retention clock while it is open.</td><td>L1–L3</td><td>M</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="nonfunctional" data-doc-sec>
+        <h2><span class="sn">Section 06</span>Non-functional requirements</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Attribute</th><th>Target</th></tr></thead>
+            <tbody>
+              <tr><td class="id">NFR-01</td><td>Peak concurrency</td><td>2,500,000 simultaneous Level 3 sessions per shift, across at least three availability zones in-country.</td></tr>
+              <tr><td class="id">NFR-02</td><td>Delivery gate latency</td><td>p50 ≤ 45 s, p95 ≤ 90 s from Level 3 clear to first item rendered.</td></tr>
+              <tr><td class="id">NFR-03</td><td>Token round trip</td><td>p95 ≤ 900 ms on a 1.5 Mbps uplink; hard validity window 2000 ms.</td></tr>
+              <tr><td class="id">NFR-04</td><td>Minimum viable network</td><td>1.5 Mbps sustained upstream; graceful degradation to audio + 5 fps below that, with no verdict consequence.</td></tr>
+              <tr><td class="id">NFR-05</td><td>Client footprint</td><td>Exam client runs on a 4 GB RAM laptop of 2018 vintage; phone app supports Android 10+ and iOS 15+.</td></tr>
+              <tr><td class="id">NFR-06</td><td>Availability</td><td>99.99% during declared exam windows; no scheduled maintenance within 72 h of a national administration.</td></tr>
+              <tr><td class="id">NFR-07</td><td>Recovery</td><td>RPO 0 for responses and event records; RTO ≤ 60 s for session resumption.</td></tr>
+              <tr><td class="id">NFR-08</td><td>Accessibility</td><td>WCAG 2.2 AA across candidate, reviewer and controller surfaces; screen-reader parity for all exam navigation.</td></tr>
+              <tr><td class="id">NFR-09</td><td>Localisation</td><td>English and Hindi at launch; architecture supports all scheduled languages without client changes.</td></tr>
+              <tr><td class="id">NFR-10</td><td>Data residency</td><td>All candidate data processed and stored in-country on infrastructure the agency may inspect.</td></tr>
+              <tr><td class="id">NFR-11</td><td>Cryptography</td><td>TLS 1.3 in transit; AES-256-GCM at rest with per-session keys; Ed25519 for receipts and event signing.</td></tr>
+              <tr><td class="id">NFR-12</td><td>Determinism</td><td>Evidence engine output byte-identical across replays for seven years; engine and rule-set versions pinned per session.</td></tr>
+              <tr><td class="id">NFR-13</td><td>Review capacity</td><td>Median time to first reviewer ≤ 15 min during a live administration; reviewer pool sized to a 4% flag rate.</td></tr>
+              <tr><td class="id">NFR-14</td><td>Cost</td><td>Target delivered cost per candidate below the incumbent physical-centre cost at equal or better assurance.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note note--warn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2l6.2 11H1.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6.4v3M8 11.4v.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p><b>NFR-04 is the equity requirement.</b> Any change that raises the minimum viable
+          network, device generation or bandwidth is treated as a scope change requiring
+          programme-office approval, because it silently removes candidates from the exam.</p>
+        </div>
+      </section>
+
+      <section id="edge" data-doc-sec>
+        <h2><span class="sn">Section 07</span>Edge-case protocols</h2>
+        <p>
+          Twenty-six defined states. The governing rule: <strong>an environmental failure is never
+          a candidate's fault unless a human reviewer, looking at the evidence, concludes that it
+          was.</strong>
+        </p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>ID</th><th>Trigger</th><th>Detection</th><th>Protocol</th><th>Candidate impact</th></tr></thead>
+            <tbody>
+              <tr><td class="id">E01</td><td>Primary network drops</td><td>Heartbeat miss &gt; 400 ms</td><td>Timer halts, answers sealed locally, client retries 15 min; on resume, elapsed time credited in full</td><td>None — event on record only</td></tr>
+              <tr><td class="id">E02</td><td>Incoming phone call</td><td>OS audio-session interrupt</td><td>Camera session held, timer paused; answered call logged as stream interruption and routed to review</td><td>Review, not penalty</td></tr>
+              <tr><td class="id">E03</td><td>Secondary battery exhausted</td><td>Battery telemetry &lt; 5% or stream end</td><td>10-minute restoration window; beyond it session becomes Not assessable</td><td>Free re-sit</td></tr>
+              <tr><td class="id">E04</td><td>Phone mount slips</td><td>Geometry outside 60°–120° for 2 frames</td><td>Reposition prompt; window excluded from exam clock</td><td>None</td></tr>
+              <tr><td class="id">E05</td><td>Mains power failure</td><td>Client on battery + region correlation</td><td>Degrade to audio + 5 fps; region-wide pattern escalates to agency incident</td><td>Reschedule if regional</td></tr>
+              <tr><td class="id">E06</td><td>Second person enters frame</td><td>Additional face detected</td><td>Environmental event with clip attached; a human distinguishes passing from seated</td><td>Review only</td></tr>
+              <tr><td class="id">E07</td><td>Comfort or medical break</td><td>Declared in advance</td><td>Break granted, clock excluded; re-entry requires fresh liveness</td><td>None</td></tr>
+              <tr><td class="id">E08</td><td>Assistive technology in use</td><td>Declared at registration</td><td>Status agent allowlists AT; timing model adjusted at generation</td><td>None</td></tr>
+              <tr><td class="id">E09</td><td>Only one device available</td><td>Readiness check</td><td>Candidate assigned a supervised civic node with loan hardware</td><td>None</td></tr>
+              <tr><td class="id">E10</td><td>Browser or OS crash</td><td>Session heartbeat lost</td><td>Resume token valid 15 min; answers restored from sealed local store</td><td>None</td></tr>
+              <tr><td class="id">E11</td><td>Secondary app backgrounded</td><td>App lifecycle event</td><td>Two warnings, then pause; repeated backgrounding is an event for review</td><td>Review only</td></tr>
+              <tr><td class="id">E12</td><td>Bandwidth below floor</td><td>Sustained &lt; 1.5 Mbps up</td><td>Automatic degradation ladder; token glyphs enlarge; no verdict consequence</td><td>None</td></tr>
+              <tr><td class="id">E13</td><td>Loud ambient environment</td><td>Audio SNR</td><td>Noted as environmental context; never a flag on its own</td><td>None</td></tr>
+              <tr><td class="id">E14</td><td>Two candidates in one household</td><td>Shared NAT + concurrent sessions</td><td>Permitted and expected; each session evaluated independently</td><td>None</td></tr>
+              <tr><td class="id">E15</td><td>Spectacle glare</td><td>Mesh confidence drop</td><td>Reposition-light prompt; profile camera carries verification meanwhile</td><td>None</td></tr>
+              <tr><td class="id">E16</td><td>Religious head covering</td><td>Declared or detected</td><td>Verification uses the visible facial region; no request to remove anything</td><td>None</td></tr>
+              <tr><td class="id">E17</td><td>Facial difference or prosthetic</td><td>Declared at registration</td><td>Enrolment-based matching against the candidate's own baseline, not a population model</td><td>None</td></tr>
+              <tr><td class="id">E18</td><td>Severe backlight</td><td>Face SNR below floor</td><td>Guided lighting fix; if unresolved after two attempts, Not assessable</td><td>Free re-sit</td></tr>
+              <tr><td class="id">E19</td><td>Client clock skew</td><td>Server-side comparison</td><td>Ignored — server clock is authoritative for every validity decision</td><td>None</td></tr>
+              <tr><td class="id">E20</td><td>Attestation provider outage</td><td>Vendor API failure</td><td>Cached receipts honoured for 24 h; new sessions drop to Level 2 with agency notification</td><td>Level declared on result</td></tr>
+              <tr><td class="id">E21</td><td>Generation service degraded</td><td>Latency or error budget</td><td>Fall back to pre-calibrated variant pool; delivery never blocks on the model</td><td>None</td></tr>
+              <tr><td class="id">E22</td><td>Variant fails calibration</td><td>IRT tolerance check</td><td>Variant discarded, next candidate-specific variant drawn; rejection logged with parameters</td><td>None</td></tr>
+              <tr><td class="id">E23</td><td>Candidate disputes a verdict</td><td>Dispute opened in report</td><td>Retention clock frozen; independent panel review within 10 working days</td><td>Right of reply</td></tr>
+              <tr><td class="id">E24</td><td>Reviewers disagree</td><td>Verdict mismatch</td><td>Three-person panel; reasoning joins the candidate record</td><td>Transparent outcome</td></tr>
+              <tr><td class="id">E25</td><td>Regional internet shutdown</td><td>Correlated loss by geography</td><td>Agency incident declared; affected sessions Not assessable — administrative, re-sit issued</td><td>Automatic re-sit</td></tr>
+              <tr><td class="id">E26</td><td>Candidate is a minor</td><td>Date of birth at registration</td><td>Guardian co-consent required under DPDP; retention reduced to 15 days</td><td>Additional protection</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="verdicts" data-doc-sec>
+        <h2><span class="sn">Section 08</span>Verdicts and appeals</h2>
+        <p>The verdict set is closed. Adding a fourth outcome is a breaking change requiring board approval and public notice.</p>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Verdict</th><th>Meaning</th><th>Who may assign it</th><th>Consequence</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="verdict verdict--clear"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear</span></td>
+                <td>No flags raised, or flags raised and resolved as benign by a reviewer.</td>
+                <td>System (no flags) or reviewer</td>
+                <td>Result released normally. Media purged.</td>
+              </tr>
+              <tr>
+                <td><span class="verdict verdict--review"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.6l5 8.8H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 5v2.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Review required</span></td>
+                <td>One or more events need human interpretation. This is a routing state, not a finding.</td>
+                <td>System</td>
+                <td>Result held ≤ 10 working days. Candidate notified with the trail.</td>
+              </tr>
+              <tr>
+                <td><span class="verdict verdict--null"><svg class="verdict__ico" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.6 6h4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Not assessable</span></td>
+                <td>Evidence quality is insufficient to say anything at all. Says nothing about the candidate.</td>
+                <td>Reviewer or agency (administrative)</td>
+                <td>Free re-sit at the next available slot. No mark, no penalty, no record of suspicion.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>What a reviewer may conclude</h3>
+        <p>
+          A reviewer resolves <em>Review required</em> into <em>Clear</em> or <em>Not assessable</em>.
+          A finding of misconduct is <strong>not</strong> a verdict this system issues — it is a
+          decision for the institution's own disciplinary process, to which TrustXD supplies the
+          evidence file and nothing else. The product deliberately has no opinion on guilt.
+        </p>
+      </section>
+
+      <section id="data" data-doc-sec>
+        <h2><span class="sn">Section 09</span>Data and retention</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Class</th><th>Examples</th><th>Retention</th><th>Candidate visibility</th></tr></thead>
+            <tbody>
+              <tr><td>Identity artefacts</td><td>ID field hashes, enrolment face template</td><td>Duration of the exam cycle + 90 days</td><td>Visible, exportable</td></tr>
+              <tr><td>Unflagged media</td><td>Primary and secondary video, ambient audio</td><td>Destroyed at session seal</td><td>Live self-view only</td></tr>
+              <tr><td>Flagged clips</td><td>±30 s around a flagged event</td><td>30 days (15 for minors), frozen during appeal</td><td>Playable in candidate report</td></tr>
+              <tr><td>Event records</td><td>Timestamped protocol events, verdicts</td><td>7 years, append-only</td><td>Full trail visible</td></tr>
+              <tr><td>Consent receipts</td><td>Signed grants and withdrawals</td><td>7 years</td><td>Downloadable any time</td></tr>
+              <tr><td>Purge records</td><td>Object hash, policy, timestamp</td><td>7 years</td><td>Notified on purge</td></tr>
+              <tr><td>Delivered variants</td><td>Item text, IRT parameters per candidate</td><td>7 years</td><td>Released with the answer key</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code"><span class="c">// Evidence record — the only shape the review API accepts.</span>
+<span class="c">// Note what is absent: no score, no probability, no ranking, no confidence.</span>
+{
+  <span class="k">"session"</span>: <span class="s">"S-77401"</span>,
+  <span class="k">"engine"</span>:  { <span class="k">"evidence"</span>: <span class="s">"3.2.1"</span>, <span class="k">"rules"</span>: <span class="s">"nta-l3-2026.4"</span> },
+  <span class="k">"event"</span>: {
+    <span class="k">"t"</span>:      <span class="s">"2026-07-30T11:42:06.114+05:30"</span>,   <span class="c">// server clock, authoritative</span>
+    <span class="k">"type"</span>:   <span class="s">"secondary_stream.interrupt"</span>,
+    <span class="k">"rule"</span>:   <span class="s">"B-04.heartbeat_timeout"</span>,
+    <span class="k">"observed"</span>: { <span class="k">"rtt_ms"</span>: <span class="n">4180</span>, <span class="k">"gap_s"</span>: <span class="n">11.4</span> },
+    <span class="k">"clip"</span>:   <span class="s">"sha256:9c1f…a07f"</span>,
+    <span class="k">"routes_to"</span>: <span class="s">"human_review"</span>
+  },
+  <span class="k">"verdict"</span>: <span class="s">"review_required"</span>       <span class="c">// one of exactly three</span>
+}</div>
+      </section>
+
+      <section id="rollout" data-doc-sec>
+        <h2><span class="sn">Section 10</span>Rollout and success measures</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Phase</th><th>Scope</th><th>Exit criteria</th></tr></thead>
+            <tbody>
+              <tr><td><strong>P0 · Shadow</strong></td><td>One university entrance test, ~5,000 candidates, run alongside the existing centre-based exam.</td><td>Zero delivery incidents; verdict distribution reviewed by the institution's own psychometrician; candidate satisfaction ≥ 4.2/5.</td></tr>
+              <tr><td><strong>P1 · Parallel</strong></td><td>Two university tests + one banking recruitment shift, ~120,000 candidates, results issued from TrustXD.</td><td>Gate latency p95 ≤ 90 s; flag rate ≤ 4%; appeal upholding rate published.</td></tr>
+              <tr><td><strong>P2 · Regional</strong></td><td>One state common entrance test, ~600,000 candidates, with civic nodes in aspirational districts.</td><td>Civic-node coverage ≥ 98% of candidates lacking a second device; no correlation between district and Not-assessable rate.</td></tr>
+              <tr><td><strong>P3 · National</strong></td><td>A national competitive examination at full scale.</td><td>Statutory audit clean; independent DIF review published; incumbent cost per candidate matched or beaten.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Success measures</h3>
+        <ul class="bullets">
+          <li><strong>Zero papers in existence before T−0.</strong> Binary, auditable, non-negotiable.</li>
+          <li><strong>Flag rate under 4%</strong> with an appeal-upholding rate published every cycle — a rising upholding rate means the rules are wrong, not the candidates.</li>
+          <li><strong>No demographic skew</strong> in Not-assessable rates across district, language, gender or device tier. This is measured and published, not asserted.</li>
+          <li><strong>Median time to reviewer under 15 minutes</strong> during live administration.</li>
+          <li><strong>Candidate-reported clarity ≥ 4.2/5</strong> on "I understood what was being recorded and why".</li>
+        </ul>
+      </section>
+
+      <section id="risks" data-doc-sec>
+        <h2><span class="sn">Section 11</span>Risks and open questions</h2>
+        <div class="dtable">
+          <table>
+            <thead><tr><th>Risk</th><th>Assessment</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr><td>Household coercion — someone in the room pressuring the candidate</td><td>The hardest unsolved problem in at-home assessment. Two cameras see the room; they cannot see intent.</td><td>Ambient audio + environmental events; a discreet in-exam duress signal; civic nodes as an opt-in alternative for any candidate who wants one, no reason required.</td></tr>
+              <tr><td>Generative model produces a subtly harder variant</td><td>Medium likelihood, high impact on fairness.</td><td>Machine-solve gate, IRT tolerance gate, response-time model, and post-hoc DIF. Rejection is cheap; delivery of a bad variant is not.</td></tr>
+              <tr><td>Attestation monoculture — dependence on two vendors</td><td>Structural. Apple and Google can change policy unilaterally.</td><td>Cached receipts, documented Level 2 fallback, and an active track on open attestation standards.</td></tr>
+              <tr><td>Device inequality reframed as merit</td><td>High. The most likely way this product does harm.</td><td>NFR-04 as a hard floor, civic nodes funded as programme cost, and published Not-assessable rates by district.</td></tr>
+              <tr><td>Reviewer capacity at national peak</td><td>Medium. A 4% flag rate at 2.5 M candidates is 100,000 reviews.</td><td>Flag-rate budgeting per rule, tiered triage, and a contracted pool sized against the worst observed rate, not the average.</td></tr>
+              <tr><td>Scope creep toward behavioural analytics</td><td>Medium — it will be requested by customers.</td><td>Schema-level refusal, published product principles, and a contractual commitment not to ship integrity scoring.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Open questions for the evaluation committee</h3>
+        <ol class="steps">
+          <li>Should <em>Not assessable</em> re-sits be scheduled within the same cycle, or does that create a second-mover advantage that the variant engine must then neutralise?</li>
+          <li>Who contracts the reviewer pool — the agency, an independent trust, or a statutory body? Independence is a design requirement, and procurement structure decides whether it is real.</li>
+          <li>What is the statutory basis for civic nodes, and which budget line funds them?</li>
+          <li>Should delivered variants and their parameters be published after every administration, as answer keys are today? We propose yes.</li>
+        </ol>
+      </section>
+
+      <div class="docnav">
+        <a href="index.html"><b>Back</b><span>Platform overview</span></a>
+        <a href="architecture.html"><b>Next deliverable</b><span>System architecture blueprint →</span></a>
+      </div>
+    </article>
+  </div>
+</div>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__bottom" style="border-top:0;padding-top:0">
+      <span>© <span data-year></span> TrustXD ExamOS. Concept document — figures are illustrative.</span>
+      <span><a href="index.html">Home</a> · <a href="architecture.html">Architecture</a> · <a href="psychometrics.html">Psychometrics</a> · <a href="pitch.html">Deck</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js" defer></script>
+</body>
+</html>
